@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useRouter } from "expo-router";
-import { useSignIn } from "@clerk/expo";
-import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import { useSignUp } from "@clerk/expo";
 
 import { AuthCard } from "@/components/auth/Auth-card";
 import { AuthInput } from "@/components/auth/Auth-input";
@@ -10,22 +14,30 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 
 const SignUp = () => {
-  const { signIn, errors, fetchStatus } = useSignIn();
+  const { signUp, errors, fetchStatus } = useSignUp();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
 
   const loading = fetchStatus === "fetching";
 
-  const onSignIn = async () => {
+  const onSignUp = async () => {
     try {
-      await signIn.create({
-        identifier: email,
+      const { error } = await signUp.password({
+        emailAddress,
         password,
       });
+      if (error) {
+        console.error(JSON.stringify(error, null, 2));
+        return;
+      }
 
-      router.replace("/");
+      if (!error) {
+        await signUp.verifications.sendEmailCode();
+      }
+
+      router.push("/verify-email");
     } catch (err) {
       console.log(err);
     }
@@ -34,17 +46,20 @@ const SignUp = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1">
-        <AuthCard title="Welcome Back 👋" description="Sign in to continue">
+        <AuthCard
+          title="Create Account 🚀"
+          description="Sign up to get started"
+        >
           <AuthInput
             label="Email"
-            value={email}
-            onChangeText={setEmail}
+            value={emailAddress}
+            onChangeText={setEmailAddress}
             placeholder="you@example.com"
           />
 
-          {errors?.fields?.identifier && (
+          {errors?.fields?.emailAddress && (
             <Text className="text-red-500 text-sm">
-              {errors.fields.identifier.message}
+              {errors.fields.emailAddress.message}
             </Text>
           )}
 
@@ -62,8 +77,8 @@ const SignUp = () => {
           )}
 
           <Button
-            onPress={onSignIn}
-            disabled={!email || !password || loading}
+            onPress={onSignUp}
+            disabled={!emailAddress || !password || loading}
             className="mt-3 bg-teal-500 rounded-xl py-3 active:opacity-80"
           >
             {loading ? (
@@ -79,7 +94,7 @@ const SignUp = () => {
             <Text className="text-neutral-400">Already have an account? </Text>
             <Text
               className="text-teal-400 font-semibold"
-              onPress={() => router.push("/sign-up")}
+              onPress={() => router.push("/sign-in")}
             >
               Login
             </Text>
