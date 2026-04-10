@@ -19,12 +19,14 @@ const SignUp = () => {
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setName] = useState("");
 
   const loading = fetchStatus === "fetching";
 
   const onSignUp = async () => {
     try {
       const { error } = await signUp.password({
+        firstName,
         emailAddress,
         password,
       });
@@ -50,6 +52,12 @@ const SignUp = () => {
           title="Create Account 🚀"
           description="Sign up to get started"
         >
+          <AuthInput
+            label="Name"
+            value={firstName}
+            onChangeText={setName}
+            placeholder=""
+          />
           <AuthInput
             label="Email"
             value={emailAddress}
