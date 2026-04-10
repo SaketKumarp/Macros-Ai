@@ -1,114 +1,93 @@
 import { useState } from "react";
-import { View, TextInput, ActivityIndicator } from "react-native";
-
+import { ActivityIndicator, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useSignIn } from "@clerk/expo";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 
+import { AuthCard } from "@/components/auth/Auth-card";
+import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { useSignUp } from "@clerk/expo";
 
-const SignupPage = () => {
-  const { signUp, errors, fetchStatus } = useSignUp();
+const SignUp = () => {
+  const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const onSignUp = async () => {
+  const loading = fetchStatus === "fetching";
+
+  const onSignIn = async () => {
     try {
-      setLoading(true);
-
-      await signUp.create({
-        emailAddress: email,
+      await signIn.create({
+        identifier: email,
         password,
       });
 
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
-      router.push("/verify-email");
+      router.replace("/");
     } catch (err) {
       console.log(err);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-black px-4">
-      <Card className="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl shadow-xl">
-        {/* HEADER */}
-        <CardHeader>
-          <CardTitle className="text-white text-2xl text-center">
-            Create Account 🚀
-          </CardTitle>
-          <CardDescription className="text-neutral-400 text-center">
-            Start your journey with us
-          </CardDescription>
-        </CardHeader>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View className="flex-1">
+        <AuthCard title="Welcome Back 👋" description="Sign in to continue">
+          <AuthInput
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="you@example.com"
+          />
 
-        {/* CONTENT */}
-        <CardContent className="gap-4">
-          {/* EMAIL */}
-          <View className="gap-1">
-            <Text className="text-neutral-300 text-sm">Email</Text>
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder="you@example.com"
-              placeholderTextColor="#888"
-              className="bg-neutral-800 text-white px-4 py-3 rounded-xl border border-neutral-700"
-            />
-          </View>
+          {errors?.fields?.identifier && (
+            <Text className="text-red-500 text-sm">
+              {errors.fields.identifier.message}
+            </Text>
+          )}
 
-          {/* PASSWORD */}
-          <View className="gap-1">
-            <Text className="text-neutral-300 text-sm">Password</Text>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              placeholder="••••••••"
-              placeholderTextColor="#888"
-              secureTextEntry
-              className="bg-neutral-800 text-white px-4 py-3 rounded-xl border border-neutral-700"
-            />
-          </View>
+          <AuthInput
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-          {/* BUTTON */}
+          {errors?.fields?.password && (
+            <Text className="text-red-500 text-sm">
+              {errors.fields.password.message}
+            </Text>
+          )}
+
           <Button
-            onPress={onSignUp}
-            className="mt-4 bg-teal-500 rounded-xl py-3 active:opacity-80"
+            onPress={onSignIn}
+            disabled={!email || !password || loading}
+            className="mt-3 bg-teal-500 rounded-xl py-3 active:opacity-80"
           >
             {loading ? (
               <ActivityIndicator />
             ) : (
               <Text className="text-white text-center font-semibold">
-                Sign Up
+                Create Account
               </Text>
             )}
           </Button>
 
-          {/* FOOTER LINK */}
-          <View className="flex-row justify-center mt-2">
+          <View className="flex-row justify-center mt-3">
             <Text className="text-neutral-400">Already have an account? </Text>
             <Text
               className="text-teal-400 font-semibold"
-              onPress={() => router.push("/sign-in")}
+              onPress={() => router.push("/sign-up")}
             >
-              Sign In
+              Login
             </Text>
           </View>
-        </CardContent>
-      </Card>
-    </View>
+        </AuthCard>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
-export default SignupPage;
+export default SignUp;
