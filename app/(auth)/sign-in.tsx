@@ -5,7 +5,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { Href, useRouter } from "expo-router";
 import { useSignIn } from "@clerk/expo";
 
 import { AuthCard } from "@/components/auth/Auth-card";
@@ -16,33 +16,43 @@ import { Text } from "@/components/ui/text";
 const SignUp = () => {
   const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
-
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
 
   const loading = fetchStatus === "fetching";
 
   const onSignIn = async () => {
-    try {
-      await signIn.create({
-        identifier: email,
-        password,
-      });
+    const { error } = await signIn.password({ emailAddress, password });
+    if (error) {
+      console.error(JSON.stringify(error, null, 2));
+      return;
+    }
 
-      router.replace("/");
-    } catch (err) {
-      console.log(err);
+    if (signIn.status === "complete") {
+      await signIn.finalize({
+        navigate: ({ decorateUrl, session }) => {
+          if (session?.currentTask) {
+            console.log(session?.currentTask);
+            return;
+          }
+          const url = decorateUrl("/");
+          if (url.startsWith("http")) {
+            window.location.href = url;
+          } else {
+            router.push(url as Href);
+          }
+        },
+      });
     }
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1">
         <AuthCard title="Welcome Back 👋" description="Sign in to continue">
           <AuthInput
             label="Email"
-            value={email}
-            onChangeText={setEmail}
+            value={emailAddress}
+            onChangeText={setEmailAddress}
             placeholder="you@example.com"
           />
 
@@ -67,7 +77,6 @@ const SignUp = () => {
 
           <Button
             onPress={onSignIn}
-            disabled={!email || !password || loading}
             className="mt-3 bg-teal-500 rounded-xl py-3 active:opacity-80"
           >
             {loading ? (
