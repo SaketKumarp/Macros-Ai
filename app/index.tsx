@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
 import { useClerk, useUser } from "@clerk/expo";
+import { useQuery } from "convex/react";
 import { Redirect } from "expo-router";
 import { Text, View, Image } from "react-native";
 
@@ -14,6 +16,7 @@ export default function Index() {
       console.log("error in sign-out", err);
     }
   };
+  const identity = useQuery(api.test.test);
 
   if (!isSignedIn) {
     return <Redirect href={"/(auth)/sign-up"} />;
@@ -33,6 +36,7 @@ export default function Index() {
       <Button variant={"outline"} onPress={handleSignout}>
         <Text>Sign-out</Text>
       </Button>
+      <Text>{identity?.email}</Text>
     </View>
   );
 }

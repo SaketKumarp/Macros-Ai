@@ -18,7 +18,7 @@ export const AuthInput = ({
 }: AuthInputPorps) => {
   return (
     <View className="gap-1">
-      <Text>{label}</Text>
+      <Text className="text-white">{label}</Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
