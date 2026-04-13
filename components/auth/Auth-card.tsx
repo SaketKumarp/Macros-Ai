@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Image, View } from "react-native";
 
 import { Text } from "../ui/text";
 import {
@@ -23,7 +23,11 @@ export const AuthCard = ({ title, description, children }: AuthCardProps) => {
 
       <View className="items-center mb-6">
         <View className="w-14 h-14 bg-teal-500 rounded-2xl items-center justify-center mb-3 shadow-lg">
-          <Text className="text-white text-xl font-bold">🔥</Text>
+          <Image
+            source={require("../../assets/images/macro.png")}
+            className="w-20 h-20"
+            resizeMode="contain"
+          />
         </View>
 
         <Text className="text-white text-2xl font-bold">MacroTrack</Text>
