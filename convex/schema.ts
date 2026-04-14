@@ -2,7 +2,27 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-  users: defineTable({
+  foods: defineTable({
+    userId: v.string(),
     name: v.string(),
+    calories: v.number(),
+    protein: v.number(),
+    carbs: v.number(),
+    fat: v.number(),
+    date: v.string(),
+  }),
+
+  goals: defineTable({
+    userId: v.string(),
+    calories: v.number(),
+    protein: v.number(),
+    carbs: v.number(),
+    fat: v.number(),
+  }),
+
+  weights: defineTable({
+    userId: v.string(),
+    weight: v.number(),
+    date: v.string(),
   }),
 });

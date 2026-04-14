@@ -1,30 +1,27 @@
+import { MacroCard } from "@/components/frontend/Macro-card";
 import { MacroRing } from "@/components/frontend/Macro-ring";
-import { Button } from "@/components/ui/button";
-import { api } from "@/convex/_generated/api";
-import { useClerk, useUser } from "@clerk/expo";
-import { useQuery } from "convex/react";
-import { Redirect } from "expo-router";
-import { Text, View, Image } from "react-native";
+import { View, Text } from "react-native";
 
 export default function Index() {
-  const { isSignedIn, user } = useUser();
-  const { signOut } = useClerk();
+  const totalCalories = 2000;
+  const eatenCalories = 1450;
 
-  const handleSignout = async () => {
-    try {
-      await signOut();
-    } catch (err) {
-      console.log("error in sign-out", err);
-    }
-  };
-  const identity = useQuery(api.test.test);
-
-  if (!isSignedIn) {
-    return <Redirect href={"/(auth)/sign-up"} />;
-  }
   return (
-    <View className="flex-1 bg-black pt-16 items-center">
-      <MacroRing progress={0.55} caloriesLeft={828} />
+    <View className="flex-1 bg-black px-6 pt-16">
+      <Text className="text-white text-2xl font-bold">Today</Text>
+      <Text className="text-gray-400 mt-1">Track your nutrition</Text>
+
+      <View className="items-center mt-10">
+        <MacroRing
+          totalCalories={totalCalories}
+          eatenCalories={eatenCalories}
+        />
+      </View>
+      <View className="flex-row justify-between mt-10">
+        <MacroCard label="Protein" value={90} color="#ff6b6b" />
+        <MacroCard label="Carbs" value={180} color="#feca57" />
+        <MacroCard label="Fat" value={60} color="#1dd1a1" />
+      </View>
     </View>
   );
 }
