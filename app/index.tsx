@@ -1,3 +1,4 @@
+import { MacroRing } from "@/components/frontend/Macro-ring";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { useClerk, useUser } from "@clerk/expo";
@@ -22,21 +23,8 @@ export default function Index() {
     return <Redirect href={"/(auth)/sign-up"} />;
   }
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Image
-        source={{ uri: user?.imageUrl }}
-        className="w-28 h-28 rounded-full border-4 border-[#1abc9c]"
-      />
-
-      <Text className="text-2xl font-semibold mt-4">{user?.fullName}</Text>
-
-      <Text className="text-gray-500 mt-1">
-        {user?.primaryEmailAddress?.emailAddress}
-      </Text>
-      <Button variant={"outline"} onPress={handleSignout}>
-        <Text>Sign-out</Text>
-      </Button>
-      <Text>{identity?.email}</Text>
+    <View className="flex-1 bg-black pt-16 items-center">
+      <MacroRing progress={0.55} caloriesLeft={828} />
     </View>
   );
 }
