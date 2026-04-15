@@ -25,7 +25,6 @@ const MacroItem = ({ label, value }: { label: string; value: number }) => (
 const MealCard = ({ data, onAdd }: Props) => {
   return (
     <View className="flex-1 mt-6 bg-[#0d0d0d] rounded-3xl border border-[#1c1c1e] p-6 justify-between">
-      
       {/* 🔝 HEADER */}
       <View>
         <Text className="text-white text-2xl font-bold tracking-wide">

@@ -13,7 +13,7 @@ export default defineSchema({
     sugar: v.number(),
     fat: v.number(),
     type: v.string(),
-    image: v.string(),
+    image: v.optional(v.string()),
     date: v.string(), // "YYYY-MM-DD"
     createdAt: v.number(),
   })

@@ -8,7 +8,6 @@
  * @module
  */
 
-import type * as analyze from "../analyze.js";
 import type * as macros from "../macros.js";
 import type * as test from "../test.js";
 
@@ -19,7 +18,6 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  analyze: typeof analyze;
   macros: typeof macros;
   test: typeof test;
 }>;

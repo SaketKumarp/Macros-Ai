@@ -4,14 +4,14 @@ import React from "react";
 type FoodType = "drink" | "snack" | "fastfood" | "protein" | "carb" | "fat";
 
 export interface EatenCardProps {
-  id: number;
+  id?: number;
   carbs: number;
   name: string;
   calories: number;
   protein: number;
   fat: number;
   sugar: number;
-  type?: FoodType;
+  type: FoodType;
 }
 
 const getFoodMeta = (type?: FoodType) => {

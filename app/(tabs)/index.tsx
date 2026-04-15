@@ -1,9 +1,11 @@
 import EatenCard, { EatenCardProps } from "@/components/frontend/Eaten-Card";
 import { MacroCard } from "@/components/frontend/Macro-card";
 import { MacroRing } from "@/components/frontend/Macro-ring";
+import { api } from "@/convex/_generated/api";
 import { useToast } from "@/providers/toast";
 
 import { useClerk, useUser } from "@clerk/expo";
+import { useQuery } from "convex/react";
 import { Redirect, useRouter } from "expo-router";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 
@@ -13,70 +15,74 @@ export default function Index() {
   const { showToast } = useToast();
   const router = useRouter();
 
+  const mealData = useQuery(api.macros.getTodayMeals);
+  const mealLoading = mealData === undefined;
+  const meals = mealData ?? [];
   const totalCalories = 2000;
   const eatenCalories = 1450;
-  const dummyData: EatenCardProps[] = [
-    {
-      id: 1,
-      name: "Chicken Rice",
-      calories: 450,
-      protein: 35,
-      carbs: 50,
-      fat: 12,
-      sugar: 5,
-      type: "protein",
-    },
-    {
-      id: 2,
-      name: "Oats with Milk",
-      calories: 300,
-      protein: 15,
-      carbs: 40,
-      fat: 8,
-      sugar: 10,
-      type: "carb",
-    },
-    {
-      id: 3,
-      name: "Peanut Butter Toast",
-      calories: 350,
-      protein: 12,
-      carbs: 30,
-      fat: 18,
-      sugar: 6,
-      type: "protein",
-    },
-    {
-      id: 4,
-      name: "Cold Drink",
-      calories: 120,
-      protein: 0,
-      carbs: 30,
-      fat: 0,
-      sugar: 25,
-      type: "drink",
-    },
-    {
-      id: 5,
-      name: "Burger",
-      calories: 500,
-      protein: 20,
-      carbs: 45,
-      fat: 25,
-      sugar: 8,
-      type: "fastfood",
-    },
-    {
-      id: 6,
-      name: "Chips",
-      calories: 250,
-      protein: 5,
-      carbs: 20,
-      fat: 15,
-      sugar: 2,
-      type: "snack",
-    },
-  ];
+  // const dummyData: EatenCardProps[] = [
+  //   {
+  //     id: 1,
+  //     name: "Chicken Rice",
+  //     calories: 450,
+  //     protein: 35,
+  //     carbs: 50,
+  //     fat: 12,
+  //     sugar: 5,
+  //     type: "protein",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Oats with Milk",
+  //     calories: 300,
+  //     protein: 15,
+  //     carbs: 40,
+  //     fat: 8,
+  //     sugar: 10,
+  //     type: "carb",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Peanut Butter Toast",
+  //     calories: 350,
+  //     protein: 12,
+  //     carbs: 30,
+  //     fat: 18,
+  //     sugar: 6,
+  //     type: "protein",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Cold Drink",
+  //     calories: 120,
+  //     protein: 0,
+  //     carbs: 30,
+  //     fat: 0,
+  //     sugar: 25,
+  //     type: "drink",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Burger",
+  //     calories: 500,
+  //     protein: 20,
+  //     carbs: 45,
+  //     fat: 25,
+  //     sugar: 8,
+  //     type: "fastfood",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Chips",
+  //     calories: 250,
+  //     protein: 5,
+  //     carbs: 20,
+  //     fat: 15,
+  //     sugar: 2,
+  //     type: "snack",
+  //   },
+  // ];
+
   if (!isSignedIn) {
     return <Redirect href={"/(auth)/sign-in"} />;
   }
@@ -129,19 +135,26 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          {dummyData.map((item) => (
-            <EatenCard
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              carbs={item.carbs}
-              calories={item.calories}
-              fat={item.fat}
-              protein={item.protein}
-              sugar={item.sugar}
-              type={item.type}
-            />
-          ))}
+          {mealLoading ? (
+            <Text className="text-gray-400 text-center mt-4">
+              Loading meals...
+            </Text>
+          ) : meals.length === 0 ? (
+            <Text className="text-gray-400 text-center mt-4">No meals yet</Text>
+          ) : (
+            meals.map((item) => (
+              <EatenCard
+                key={item._id}
+                name={item.name}
+                carbs={item.carbs}
+                calories={item.calories}
+                fat={item.fat}
+                protein={item.protein}
+                sugar={item.sugar}
+                type={item.type as EatenCardProps["type"]}
+              />
+            ))
+          )}
         </ScrollView>
       </View>
 

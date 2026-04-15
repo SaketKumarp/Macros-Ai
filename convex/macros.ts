@@ -1,7 +1,5 @@
-// convex/macros.ts
 import { v } from "convex/values";
-import { action, mutation, query } from "./_generated/server";
-// import { analyzeMeal } from "../lib/gemini";
+import { mutation, query } from "./_generated/server";
 
 export const addMeal = mutation({
   args: {
@@ -13,13 +11,13 @@ export const addMeal = mutation({
     fat: v.number(),
     type: v.string(),
     date: v.string(),
-    image: v.string(),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized");
 
-    await ctx.db.insert("foods", {
+    const mealId = await ctx.db.insert("foods", {
       userId: user.subject,
       name: args.name,
       calories: args.calories,
@@ -32,6 +30,8 @@ export const addMeal = mutation({
       image: args.image,
       createdAt: Date.now(),
     });
+
+    return mealId;
   },
 });
 
@@ -96,10 +96,7 @@ export const getTodayMeals = query({
 
     const meals = await ctx.db
       .query("foods")
-      .withIndex("by_user_date", (q) =>
-        q.eq("userId", user.subject).eq("date", today),
-      )
-      .order("desc")
+      .withIndex("by_user", (q) => q.eq("userId", user.subject))
       .collect();
 
     return meals;
@@ -114,6 +111,7 @@ export const getFood = query({
     const data = await ctx.db
       .query("foods")
       .withIndex("by_user", (q) => q.eq("userId", user.subject))
+      .order("desc")
       .collect();
 
     return data;
@@ -163,11 +161,3 @@ export const getDateRangeSummary = query({
     return Object.values(grouped);
   },
 });
-
-// export const analyzeImage = action({
-//   args: { imageUrl: v.string() },
-//   handler: async (_, args) => {
-//     const data = await analyzeMeal(args.imageUrl);
-//     return data;
-//   },
-// });
