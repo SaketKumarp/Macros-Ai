@@ -28,6 +28,8 @@ const Upload = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       quality: 0.7,
+      allowsEditing: true,
+      aspect: [1, 1],
     });
 
     if (!result.canceled) {
@@ -47,7 +49,38 @@ const Upload = () => {
       setAiData(null);
     }
   };
+  const uploadImage = async (imageUri: string) => {
+    const data = new FormData();
 
+    data.append("file", {
+      uri: imageUri,
+      type: "image/jpeg",
+      name: "photo.jpg",
+    } as any); // 👈 IMPORTANT (RN fix)
+
+    data.append("upload_preset", "macro_upload");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dc1rcdoci/image/upload",
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            "Content-Type": "multipart/form-data", // 👈 IMPORTANT
+          },
+        },
+      );
+
+      const result = await res.json();
+
+      console.log("Uploaded URL:", result.secure_url);
+
+      return result.secure_url;
+    } catch (err) {
+      console.log("Upload Error:", err);
+    }
+  };
   // 🤖 AI Flow
   const handleAnalyze = async () => {
     if (!image) return;
@@ -55,13 +88,19 @@ const Upload = () => {
     try {
       setLoading(true);
 
-      // 🔥 STEP 1: Upload to Cloudinary
-      // const cloudinaryUrl = await uploadToCloudinary(image);
+      // ✅ STEP 1: Upload image
+      const cloudinaryUrl = await uploadImage(image);
 
-      // 🔥 STEP 2: Gemini API call
+      if (!cloudinaryUrl) {
+        throw new Error("Upload failed");
+      }
+
+      console.log("Cloudinary URL:", cloudinaryUrl);
+
+      // ✅ STEP 2: (Later) send to AI
       // const response = await analyzeWithGemini(cloudinaryUrl);
 
-      // 🔥 TEMP MOCK (replace later)
+      // 🔥 TEMP MOCK
       const response: MealAIResponse = {
         name: "Paneer Butter Masala",
         calories: 450,
@@ -74,7 +113,7 @@ const Upload = () => {
 
       setAiData(response);
     } catch (err) {
-      console.log(err);
+      console.log("Analyze Error:", err);
     } finally {
       setLoading(false);
     }
@@ -87,7 +126,6 @@ const Upload = () => {
     try {
       // await addMeal(aiData);
       console.log("Saved to DB:", aiData);
-      
 
       // Reset UI
       setImage(null);

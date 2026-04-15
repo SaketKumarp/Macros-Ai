@@ -12,6 +12,7 @@ export const addMeal = mutation({
     fat: v.number(),
     type: v.string(),
     date: v.string(),
+    image: v.string(),
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
@@ -27,6 +28,7 @@ export const addMeal = mutation({
       fat: args.fat,
       type: args.type,
       date: args.date,
+      image: args.image,
       createdAt: Date.now(),
     });
   },
