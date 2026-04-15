@@ -8,8 +8,11 @@ export default defineSchema({
     calories: v.number(),
     protein: v.number(),
     carbs: v.number(),
+    sugar: v.number(),
     fat: v.number(),
+
     date: v.string(),
+    createdAt: v.number(),
   }),
 
   goals: defineTable({

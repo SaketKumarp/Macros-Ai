@@ -36,7 +36,7 @@ const VerifyEmail = () => {
               console.log(session?.currentTask);
               return;
             }
-            const url = decorateUrl("/");
+            const url = decorateUrl("/screens/newuser");
             if (url.startsWith("http")) {
               window.location.href = url;
             } else {
