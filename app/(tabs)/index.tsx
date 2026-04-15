@@ -147,7 +147,7 @@ export default function Index() {
 
       {/* 🔥 Floating Add Button */}
       <TouchableOpacity
-        onPress={() => router.push("/screens/newuser")}
+        onPress={() => router.push("/screens/uplaod")}
         className="absolute bottom-6 right-6 bg-[#00d2d3] w-14 h-14 rounded-full items-center justify-center shadow-lg"
       >
         <Text className="text-black text-2xl font-bold">+</Text>

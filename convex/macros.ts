@@ -1,30 +1,162 @@
 // convex/macros.ts
 import { v } from "convex/values";
-import { action } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
-export const generateMacros = action({
+export const addMeal = mutation({
   args: {
-    weight: v.number(),
-    height: v.number(),
-    age: v.number(),
-    gender: v.string(),
-    goal: v.string(),
-    activity: v.number(),
+    name: v.string(),
+    calories: v.number(),
+    protein: v.number(),
+    carbs: v.number(),
+    sugar: v.number(),
+    fat: v.number(),
+    type: v.string(),
+    date: v.string(),
   },
-  handler: async (_, args) => {
-    const s = args.gender === "male" ? 5 : -161;
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) throw new Error("unauthorized");
 
-    const bmr = 10 * args.weight + 6.25 * args.height - 5 * args.age + s;
+    await ctx.db.insert("foods", {
+      userId: user.subject,
+      name: args.name,
+      calories: args.calories,
+      protein: args.protein,
+      carbs: args.carbs,
+      sugar: args.sugar,
+      fat: args.fat,
+      type: args.type,
+      date: args.date,
+      createdAt: Date.now(),
+    });
+  },
+});
 
-    let calories = bmr * args.activity;
+export const getMealsByDate = query({
+  args: {
+    date: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return [];
 
-    if (args.goal === "bulk") calories += 400;
-    if (args.goal === "cut") calories -= 400;
+    return await ctx.db
+      .query("foods")
+      .withIndex("by_user_date", (q) =>
+        q.eq("userId", user.subject).eq("date", args.date),
+      )
+      .collect();
+  },
+});
 
-    const protein = args.weight * 2; // grams
-    const fat = (calories * 0.25) / 9;
-    const carbs = (calories - (protein * 4 + fat * 9)) / 4;
+export const getSummaryByDate = query({
+  args: {
+    date: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return null;
 
-    return { calories, protein, fat, carbs };
+    const meals = await ctx.db
+      .query("foods")
+      .withIndex("by_user_date", (q) =>
+        q.eq("userId", user.subject).eq("date", args.date),
+      )
+      .collect();
+
+    const totals = meals.reduce(
+      (acc, item) => {
+        acc.calories += item.calories;
+        acc.protein += item.protein;
+        acc.carbs += item.carbs;
+        acc.fat += item.fat;
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 },
+    );
+
+    return {
+      date: args.date,
+      ...totals,
+      count: meals.length,
+    };
+  },
+});
+export const getTodayMeals = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return [];
+
+    // 📅 Get today's date in "YYYY-MM-DD"
+    const today = new Date().toISOString().split("T")[0];
+
+    const meals = await ctx.db
+      .query("foods")
+      .withIndex("by_user_date", (q) =>
+        q.eq("userId", user.subject).eq("date", today),
+      )
+      .order("desc") // 🔥 latest first
+      .collect();
+
+    return meals;
+  },
+});
+
+export const getFood = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return [];
+    const data = await ctx.db
+      .query("foods")
+      .withIndex("by_user", (q) => q.eq("userId", user.subject))
+      .collect();
+
+    return data;
+  },
+});
+
+export const getDateRangeSummary = query({
+  args: {
+    startDate: v.string(),
+    endDate: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return [];
+
+    const meals = await ctx.db
+      .query("foods")
+      .withIndex("by_user", (q) => q.eq("userId", user.subject))
+      .collect();
+
+    // filter range
+    const filtered = meals.filter(
+      (m) => m.date >= args.startDate && m.date <= args.endDate,
+    );
+
+    const grouped: Record<string, any> = {};
+
+    for (const meal of filtered) {
+      if (!grouped[meal.date]) {
+        grouped[meal.date] = {
+          date: meal.date,
+          calories: 0,
+          protein: 0,
+          carbs: 0,
+          fat: 0,
+          count: 0,
+        };
+      }
+
+      grouped[meal.date].calories += meal.calories;
+      grouped[meal.date].protein += meal.protein;
+      grouped[meal.date].carbs += meal.carbs;
+      grouped[meal.date].fat += meal.fat;
+      grouped[meal.date].count += 1;
+    }
+
+    return Object.values(grouped);
   },
 });

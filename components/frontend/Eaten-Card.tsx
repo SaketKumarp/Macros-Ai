@@ -17,13 +17,13 @@ export interface EatenCardProps {
 const getFoodMeta = (type?: FoodType) => {
   switch (type) {
     case "drink":
-      return { icon: "🥤", color: "#3498db" };
+      return { icon: "🍺", color: "#3498db" };
     case "snack":
       return { icon: "🍿", color: "#f1c40f" };
     case "fastfood":
       return { icon: "🍔", color: "#e74c3c" };
     case "protein":
-      return { icon: "🥩", color: "#9b59b6" };
+      return { icon: "🔥", color: "#9b59b6" };
     case "carb":
       return { icon: "🍚", color: "#f39c12" };
     case "fat":
