@@ -9,9 +9,10 @@ import { CheckCircle, XCircle, Info } from "lucide-react-native";
 type Props = {
   message: string;
   type: "success" | "error" | "info";
+  log?: string;
 };
 
-export default function Toast({ message, type }: Props) {
+export default function Toast({ message, type, log }: Props) {
   const getStyles = () => {
     switch (type) {
       case "success":
@@ -23,6 +24,7 @@ export default function Toast({ message, type }: Props) {
         return {
           bg: "bg-red-600",
           icon: <XCircle color="white" size={18} />,
+          log: log,
         };
       default:
         return {
@@ -43,6 +45,7 @@ export default function Toast({ message, type }: Props) {
     >
       {icon}
       <Text className="text-white text-sm font-medium">{message}</Text>
+      <Text className="text-white text-sm font-medium">{log}</Text>
     </Animated.View>
   );
 }

@@ -12,12 +12,14 @@ import { AuthCard } from "@/components/auth/Auth-card";
 import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useToast } from "@/providers/toast";
 
 const VerifyEmail = () => {
   const { signUp, fetchStatus } = useSignUp();
   const router = useRouter();
 
   const [code, setCode] = useState("");
+  const { showToast } = useToast();
 
   const loading = fetchStatus === "fetching";
 
@@ -43,11 +45,13 @@ const VerifyEmail = () => {
           },
         });
         router.replace("/");
+        showToast("account Created🔥", "success");
       } else {
         console.error("Sign-up attempt not complete:", signUp);
       }
     } catch (err) {
       console.log(err);
+      showToast(err, "error");
     }
   };
 

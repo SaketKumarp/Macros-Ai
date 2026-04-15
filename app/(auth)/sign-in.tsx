@@ -12,12 +12,14 @@ import { AuthCard } from "@/components/auth/Auth-card";
 import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useToast } from "@/providers/toast";
 
 const SignUp = () => {
   const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const { showToast } = useToast();
 
   const loading = fetchStatus === "fetching";
 
@@ -25,6 +27,7 @@ const SignUp = () => {
     const { error } = await signIn.password({ emailAddress, password });
     if (error) {
       console.error(JSON.stringify(error, null, 2));
+      showToast("error :", "info", error);
       return;
     }
 
@@ -40,6 +43,7 @@ const SignUp = () => {
             window.location.href = url;
           } else {
             router.push(url as Href);
+            showToast("welcome back⚡️", "success");
           }
         },
       });

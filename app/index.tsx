@@ -17,6 +17,10 @@ export default function Index() {
   if (!isSignedIn) {
     return <Redirect href={"/(auth)/sign-in"} />;
   }
+  const handleSignOut = () => {
+    signOut();
+    showToast("logged out", "success");
+  };
 
   return (
     <View className="flex-1 bg-black px-6 pt-16">
@@ -28,7 +32,7 @@ export default function Index() {
         </View>
 
         {/* 👤 Profile Button */}
-        <TouchableOpacity onPress={() => signOut()}>
+        <TouchableOpacity onPress={handleSignOut}>
           <Image
             source={{ uri: user?.imageUrl }}
             className="w-10 h-10 rounded-full border border-gray-600"

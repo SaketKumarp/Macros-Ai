@@ -8,6 +8,7 @@ interface ToastItem {
   id: string;
   message: string;
   type: ToastType;
+  log?: string;
 }
 
 const ToastContext = createContext<any>(null);
@@ -15,10 +16,10 @@ const ToastContext = createContext<any>(null);
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  const showToast = (message: string, type: ToastType = "info") => {
+  const showToast = (message: string, type: ToastType = "info",log:string) => {
     const id = Date.now().toString();
 
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts((prev) => [...prev, { id, message, type,log }]);
 
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));

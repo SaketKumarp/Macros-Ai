@@ -12,6 +12,7 @@ import { AuthCard } from "@/components/auth/Auth-card";
 import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useToast } from "@/providers/toast";
 
 const SignUp = () => {
   const { signUp, errors, fetchStatus } = useSignUp();
@@ -22,6 +23,7 @@ const SignUp = () => {
   const [firstName, setName] = useState("");
 
   const loading = fetchStatus === "fetching";
+  const { showToast } = useToast();
 
   const onSignUp = async () => {
     try {
@@ -31,6 +33,7 @@ const SignUp = () => {
         password,
       });
       if (error) {
+        showToast("error :", "info", error);
         console.error(JSON.stringify(error, null, 2));
         return;
       }
@@ -38,7 +41,7 @@ const SignUp = () => {
       if (!error) {
         await signUp.verifications.sendEmailCode();
       }
-
+      showToast("code has been sent", "info");
       router.push("/verify-email");
     } catch (err) {
       console.log(err);
