@@ -7,6 +7,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { cloudinaryApi } from "@/lib/api";
+import MealCard from "@/components/frontend/Meal-Card";
+
+import { analyzeImageFront } from "@/lib/gemini";
 
 interface MealAIResponse {
   name: string;
@@ -23,7 +27,6 @@ const Upload = () => {
   const [loading, setLoading] = useState(false);
   const [aiData, setAiData] = useState<MealAIResponse | null>(null);
 
-  // 📸 Pick from Gallery
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -38,7 +41,6 @@ const Upload = () => {
     }
   };
 
-  // 📷 Open Camera
   const openCamera = async () => {
     const result = await ImagePicker.launchCameraAsync({
       quality: 0.7,
@@ -56,21 +58,18 @@ const Upload = () => {
       uri: imageUri,
       type: "image/jpeg",
       name: "photo.jpg",
-    } as any); // 👈 IMPORTANT (RN fix)
+    } as any);
 
     data.append("upload_preset", "macro_upload");
 
     try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dc1rcdoci/image/upload",
-        {
-          method: "POST",
-          body: data,
-          headers: {
-            "Content-Type": "multipart/form-data", // 👈 IMPORTANT
-          },
+      const res = await fetch(cloudinaryApi, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       const result = await res.json();
 
@@ -95,21 +94,23 @@ const Upload = () => {
         throw new Error("Upload failed");
       }
 
-      console.log("Cloudinary URL:", cloudinaryUrl);
+      console.log("cloudinary url", cloudinaryUrl);
 
-      // ✅ STEP 2: (Later) send to AI
-      // const response = await analyzeWithGemini(cloudinaryUrl);
-
+      const response = await analyzeImageFront(image); // for AI;
+      if (!response) {
+        alert("Failed to analyze image. Try again.");
+        return;
+      }
       // 🔥 TEMP MOCK
-      const response: MealAIResponse = {
-        name: "Paneer Butter Masala",
-        calories: 450,
-        protein: 20,
-        carbs: 30,
-        fat: 25,
-        sugar: 6,
-        type: "fat",
-      };
+      //   const response: MealAIResponse = {
+      //     name: "Paneer Butter Masala",
+      //     calories: 450,
+      //     protein: 20,
+      //     carbs: 30,
+      //     fat: 25,
+      //     sugar: 6,
+      //     type: "fat",
+      //   };
 
       setAiData(response);
     } catch (err) {
@@ -194,40 +195,7 @@ const Upload = () => {
       </TouchableOpacity>
 
       {/* 🧠 AI Result Card */}
-      {aiData && (
-        <View className="mt-6 bg-[#111] p-4 rounded-2xl border border-[#1c1c1e]">
-          <Text className="text-white text-base font-semibold">
-            {aiData.name}
-          </Text>
-
-          <Text className="text-gray-400 mt-1">{aiData.calories} kcal</Text>
-
-          <View className="flex-row justify-between mt-3">
-            <Text className="text-gray-400 text-xs">
-              P: <Text className="text-white">{aiData.protein}g</Text>
-            </Text>
-            <Text className="text-gray-400 text-xs">
-              C: <Text className="text-white">{aiData.carbs}g</Text>
-            </Text>
-            <Text className="text-gray-400 text-xs">
-              F: <Text className="text-white">{aiData.fat}g</Text>
-            </Text>
-            <Text className="text-gray-400 text-xs">
-              S: <Text className="text-white">{aiData.sugar}g</Text>
-            </Text>
-          </View>
-
-          {/* ➕ Add Button */}
-          <TouchableOpacity
-            onPress={handleAddMeal}
-            className="mt-4 bg-[#00d2d3] py-3 rounded-xl items-center"
-          >
-            <Text className="text-black font-semibold">
-              Add to Today’s Meals
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {aiData && <MealCard data={aiData} onAdd={handleAddMeal} />}
 
       {/* Hint */}
       <Text className="text-gray-500 text-xs text-center mt-4">

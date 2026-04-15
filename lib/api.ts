@@ -1,0 +1,1 @@
+export const cloudinaryApi = "https://api.cloudinary.com/v1_1/dc1rcdoci/image/upload"

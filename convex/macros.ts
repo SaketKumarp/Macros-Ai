@@ -1,6 +1,7 @@
 // convex/macros.ts
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { action, mutation, query } from "./_generated/server";
+// import { analyzeMeal } from "../lib/gemini";
 
 export const addMeal = mutation({
   args: {
@@ -98,7 +99,7 @@ export const getTodayMeals = query({
       .withIndex("by_user_date", (q) =>
         q.eq("userId", user.subject).eq("date", today),
       )
-      .order("desc") // 🔥 latest first
+      .order("desc")
       .collect();
 
     return meals;
@@ -162,3 +163,11 @@ export const getDateRangeSummary = query({
     return Object.values(grouped);
   },
 });
+
+// export const analyzeImage = action({
+//   args: { imageUrl: v.string() },
+//   handler: async (_, args) => {
+//     const data = await analyzeMeal(args.imageUrl);
+//     return data;
+//   },
+// });
