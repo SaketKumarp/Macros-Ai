@@ -140,7 +140,9 @@ export default function Index() {
               Loading meals...
             </Text>
           ) : meals.length === 0 ? (
-            <Text className="text-gray-400 text-center mt-4">No meals yet</Text>
+            <Text className="text-gray-400 text-center mt-4">
+              it seems u have not eaten yet !{" "}
+            </Text>
           ) : (
             meals.map((item) => (
               <EatenCard
