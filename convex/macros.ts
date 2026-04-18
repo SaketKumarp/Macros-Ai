@@ -91,12 +91,13 @@ export const getTodayMeals = query({
     const user = await ctx.auth.getUserIdentity();
     if (!user) return [];
 
-    // 📅 Get today's date in "YYYY-MM-DD"
     const today = new Date().toISOString().split("T")[0];
 
     const meals = await ctx.db
       .query("foods")
-      .withIndex("by_user", (q) => q.eq("userId", user.subject))
+      .withIndex("by_user_date", (q) =>
+        q.eq("userId", user.subject).eq("date", today),
+      )
       .collect();
 
     return meals;
