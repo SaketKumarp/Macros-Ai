@@ -34,7 +34,7 @@ export const MacroRing = ({
       easing: Easing.out(Easing.ease),
       useNativeDriver: false,
     }).start();
-  }, [progress]);
+  }, [progress, animatedValue]);
 
   useEffect(() => {
     const id = animatedValue.addListener(({ value }) => {
@@ -42,7 +42,7 @@ export const MacroRing = ({
     });
 
     return () => animatedValue.removeListener(id);
-  }, [caloriesLeft]);
+  }, [caloriesLeft, animatedValue]);
 
   const strokeDashoffset = animatedValue.interpolate({
     inputRange: [0, 1],
@@ -62,7 +62,6 @@ export const MacroRing = ({
           strokeWidth={strokeWidth}
         />
 
-        
         <AnimatedCircle
           stroke="#00d2d3"
           fill="none"
@@ -81,7 +80,7 @@ export const MacroRing = ({
       <View className="absolute items-center">
         <Text className="text-gray-400 text-sm">Calories left</Text>
         <Text className="text-white text-4xl font-bold mt-1">
-          {displayValue}
+          {caloriesLeft}
         </Text>
         <Text className="text-gray-500 text-xs mt-1">of {totalCalories}</Text>
       </View>

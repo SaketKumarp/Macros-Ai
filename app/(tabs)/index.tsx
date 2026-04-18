@@ -19,7 +19,18 @@ export default function Index() {
   const mealLoading = mealData === undefined;
   const meals = mealData ?? [];
   const totalCalories = 2000;
-  const eatenCalories = 1450;
+  // const eatenCalories = 2000;
+  let eatenCalories = 0;
+  let proteinEaten = 0;
+  let carbsEaten = 0;
+  let fatEaten = 0;
+
+  meals.map((meal) => (eatenCalories += meal.calories));
+  meals.map((meal) => (proteinEaten += meal.protein));
+  meals.map((meal) => (carbsEaten += meal.carbs));
+  meals.map((meal) => (fatEaten += meal.fat));
+  console.log("eaten calories of today", eatenCalories);
+
   // const dummyData: EatenCardProps[] = [
   //   {
   //     id: 1,
@@ -82,7 +93,7 @@ export default function Index() {
   //     type: "snack",
   //   },
   // ];
-
+  //TODO:i have to take total maximum calories and total macros from user or may be i need to calculate it somehow using bmi of the user
   if (!isSignedIn) {
     return <Redirect href={"/(auth)/sign-in"} />;
   }
@@ -110,7 +121,7 @@ export default function Index() {
       </View>
 
       {/* 🔥 Macro Ring */}
-      <View className="items-center mt-9">
+      <View className="items-center mt-2">
         <MacroRing
           totalCalories={totalCalories}
           eatenCalories={eatenCalories}
@@ -118,10 +129,20 @@ export default function Index() {
       </View>
 
       {/* 🔥 Macro Cards */}
-      <View className="flex-row justify-between mt-6 gap-2">
-        <MacroCard label="Protein" value={90} color="#be2edd" maxValue={160} />
-        <MacroCard label="Carbs" value={180} color="#feca57" maxValue={220} />
-        <MacroCard label="Fat" value={60} color="#1dd1a1" maxValue={60} />
+      <View className="flex-row justify-between mt-4 gap-2">
+        <MacroCard
+          label="Protein"
+          value={proteinEaten}
+          color="#be2edd"
+          maxValue={160}
+        />
+        <MacroCard
+          label="Carbs"
+          value={carbsEaten}
+          color="#feca57"
+          maxValue={220}
+        />
+        <MacroCard label="Fat" value={fatEaten} color="#1dd1a1" maxValue={60} />
       </View>
 
       {/* 🔥 Meals Section */}

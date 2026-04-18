@@ -42,11 +42,11 @@ const TabsLayout = () => {
       />
 
       <Tabs.Screen
-        name="settings"
+        name="history"
         options={{
-          title: "Settings",
+          title: "history",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
+            <Ionicons name="time" size={size} color={color} />
           ),
         }}
       />

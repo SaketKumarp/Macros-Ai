@@ -131,7 +131,6 @@ const Upload = () => {
         fat: aiData.fat,
         sugar: aiData.sugar,
         type: aiData.type,
-        date: new Date().toISOString(),
         image: imgurl ?? "", //cloudinary url
       });
 
