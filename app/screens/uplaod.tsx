@@ -12,6 +12,8 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { cloudinaryApi } from "@/lib/api";
 import MealCard from "@/components/frontend/Meal-Card";
@@ -20,26 +22,18 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/providers/toast";
 import { useRouter } from "expo-router";
-
-interface MealAIResponse {
-  name: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  sugar: number;
-  type: string;
-}
+import { RecentScans } from "@/components/frontend/RecentScans";
+import DetectBar from "@/components/frontend/Detect-Section";
 
 const Upload = () => {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [aiData, setAiData] = useState<MealAIResponse | null>(null);
+  const [aiData, setAiData] = useState<any>(null);
   const [imgurl, setImgurl] = useState<string | null>(null);
+
   const addMeal = useMutation(api.macros.addMeal);
   const { showToast } = useToast();
   const router = useRouter();
-
   const insets = useSafeAreaInsets();
 
   const pickImage = async () => {
@@ -78,20 +72,14 @@ const Upload = () => {
 
     data.append("upload_preset", "macro_upload");
 
-    try {
-      const res = await fetch(cloudinaryApi, {
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+    const res = await fetch(cloudinaryApi, {
+      method: "POST",
+      body: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-      const result = await res.json();
-      return result.secure_url;
-    } catch (err) {
-      console.log("Upload Error:", err);
-    }
+    const result = await res.json();
+    return result.secure_url;
   };
 
   const handleAnalyze = async () => {
@@ -99,21 +87,13 @@ const Upload = () => {
 
     try {
       setLoading(true);
-
       const cloudinaryUrl = await uploadImage(image);
-      if (!cloudinaryUrl) throw new Error("Upload failed");
       setImgurl(cloudinaryUrl);
 
       const response = await analyzeImageFront(image);
-
-      if (!response) {
-        alert("Failed to analyze image. Try again.");
-        return;
-      }
-
       setAiData(response);
     } catch (err) {
-      console.log("Analyze Error:", err);
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -122,107 +102,145 @@ const Upload = () => {
   const handleAddMeal = async () => {
     if (!aiData) return;
 
-    try {
-      const response = await addMeal({
-        name: aiData.name,
-        calories: aiData.calories,
-        protein: aiData.protein,
-        carbs: aiData.carbs,
-        fat: aiData.fat,
-        sugar: aiData.sugar,
-        type: aiData.type,
-        image: imgurl ?? "", //cloudinary url
-      });
+    const res = await addMeal({
+      ...aiData,
+      image: imgurl ?? "",
+    });
 
-      if (response) showToast("meal added", "success");
-      router.push("/(tabs)");
-
-      setImage(null);
-      setAiData(null);
-    } catch (err) {
-      console.log(err);
-    }
+    if (res) showToast("meal added", "success");
+    router.push("/(tabs)");
   };
 
   return (
     <SafeAreaView className="flex-1 bg-black">
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          padding: 24,
+          padding: 20,
           paddingBottom: insets.bottom + 80,
         }}
-        showsVerticalScrollIndicator={false}
       >
-        {/* 🔥 Title */}
-        <Text className="text-white text-2xl font-bold text-center">
-          Add Meal
-        </Text>
-        <Text className="text-gray-400 text-center mt-1">
-          Capture or upload food & let AI calculate macros
-        </Text>
+        {/* 🔥 HEADER */}
+        <View className="items-center mb-6">
+          <Text className="text-white text-2xl font-bold">Add Meal</Text>
+          <Text className="text-gray-400 text-sm mt-1">
+            Capture food & let AI calculate macros
+          </Text>
 
-        {/* 📸 Image Preview */}
-        <View className="mt-8">
+          {/* AI Badge */}
+          <View className="flex-row items-center bg-[#1dd1a1]/20 px-3 py-1 rounded-full mt-3">
+            <Ionicons name="flash" size={14} color="#1dd1a1" />
+            <Text className="text-[#1dd1a1] ml-1 text-xs font-medium">
+              AI Powered
+            </Text>
+          </View>
+        </View>
+
+        {/* 📸 UPLOAD CARD */}
+        <View className="bg-[#111] rounded-3xl p-5 border border-white/10">
           <TouchableOpacity
             onPress={pickImage}
-            className="w-full h-40 border-2 border-dashed border-[#333] rounded-2xl items-center justify-center overflow-hidden"
+            className="h-44 rounded-2xl border border-dashed border-white/20 items-center justify-center overflow-hidden"
           >
             {image ? (
               <Image source={{ uri: image }} className="w-full h-full" />
             ) : (
-              <Text className="text-gray-500">Tap to upload image</Text>
+              <>
+                <View className="bg-[#1dd1a1]/20 p-5 rounded-full mb-3">
+                  <Ionicons name="camera" size={32} color="#1dd1a1" />
+                </View>
+                <Text className="text-white font-medium text-base">
+                  Upload Food Image
+                </Text>
+                <Text className="text-gray-400 text-xs mt-1">
+                  Take photo or upload from gallery
+                </Text>
+              </>
             )}
           </TouchableOpacity>
 
-          {/* Camera + Gallery */}
-          <View className="flex-row mt-4">
+          {/* BUTTONS */}
+          <View className="flex-row mt-4 gap-3">
             <TouchableOpacity
               onPress={openCamera}
-              className="flex-1 bg-[#1c1c1e] py-3 rounded-xl mx-1 items-center"
+              className="flex-1 bg-[#1c1c1e] py-3 rounded-xl flex-row justify-center items-center"
             >
-              <Text className="text-white">Open Camera</Text>
+              <Ionicons name="camera-outline" size={18} color="#fff" />
+              <Text className="text-white ml-2">Camera</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={pickImage}
-              className="flex-1 bg-[#1c1c1e] py-3 rounded-xl mx-1 items-center"
+              className="flex-1 bg-[#1c1c1e] py-3 rounded-xl flex-row justify-center items-center"
             >
-              <Text className="text-white">Gallery</Text>
+              <Ionicons name="images-outline" size={18} color="#fff" />
+              <Text className="text-white ml-2">Gallery</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity className="flex-1 bg-[#1c1c1e] py-3 rounded-xl flex-row justify-center items-center">
+              <Ionicons name="document-outline" size={18} color="#fff" />
+              <Text className="text-white ml-2">Files</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* 🤖 Analyze Button */}
-        <TouchableOpacity
-          onPress={handleAnalyze}
-          disabled={!image || loading}
-          className={`mt-6 py-4 rounded-xl items-center ${
-            image ? "bg-[#00d2d3]" : "bg-[#333]"
-          }`}
+        {/* 🤖 AI SECTION */}
+        <LinearGradient
+          colors={["#be2edd", "#7ed6df"]}
+          className="mt-6 rounded-3xl p-5"
         >
-          {loading ? (
-            <ActivityIndicator color="#000" />
-          ) : (
-            <Text className="text-black font-semibold text-base">
-              Analyze with AI
-            </Text>
-          )}
-        </TouchableOpacity>
+          <View className="flex-row items-center justify-between mb-2">
+            <View className="flex-row items-center">
+              <MaterialCommunityIcons name="brain" size={22} color="#fff" />
+              <Text className="text-white text-lg font-semibold ml-2">
+                Analyze with AI
+              </Text>
+            </View>
 
-        {/* 🧠 AI Result */}
+            <Text className="text-white/80 text-xs bg-white/20 px-2 py-1 rounded-full">
+              Smart
+            </Text>
+          </View>
+
+          <Text className="text-white/70 text-sm mb-4">
+            Detect calories, protein, carbs, fats & type
+          </Text>
+
+          <TouchableOpacity
+            onPress={handleAnalyze}
+            disabled={!image || loading}
+            className="bg-white py-3 rounded-xl items-center"
+          >
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text className="text-black font-semibold">Analyze Food</Text>
+            )}
+          </TouchableOpacity>
+        </LinearGradient>
+
+        {/* 🧠 FEATURES */}
+        <View className="w-full mt-7">
+          <DetectBar />
+        </View>
+
+        {/* RESULT */}
         {aiData && (
           <View className="mt-6">
             <MealCard data={aiData} onAdd={handleAddMeal} />
           </View>
         )}
-
-        {/* Hint */}
-        <Text className="text-gray-500 text-xs text-center mt-6">
-          AI will detect calories, protein, carbs, fats & type
-        </Text>
+        <RecentScans />
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const Feature = ({ icon, label, color }: any) => (
+  <View className="items-center">
+    <Ionicons name={icon} size={18} color={color} />
+    <Text className="text-gray-400 text-xs mt-1">{label}</Text>
+  </View>
+);
 
 export default Upload;

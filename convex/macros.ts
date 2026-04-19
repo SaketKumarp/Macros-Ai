@@ -163,3 +163,17 @@ export const getFood = query({
 //     return Object.values(grouped);
 //   },
 // });
+
+export const getRecentMeals = query({
+  args: {},
+
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) throw new Error("unauthorized !");
+    return await ctx.db
+      .query("foods")
+      .withIndex("by_user", (q) => q.eq("userId", user.subject))
+      .order("desc")
+      .take(10); // latest 10
+  },
+});
