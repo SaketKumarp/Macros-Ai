@@ -1,50 +1,143 @@
-# Welcome to your Expo app 👋
+# 🧠🍽️ AI Macro Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An intelligent mobile app that analyzes food images and instantly estimates **calories, protein, carbs, fats, and food type** using AI.
 
-## Get started
+Built with **Expo (React Native)** for a fast, cross-platform experience.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Features
 
-2. Start the app
+* 📸 **Food Image Recognition**
+  Capture or upload food images and let AI analyze them
 
-   ```bash
-   npx expo start
-   ```
+  <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06 (1)" src="https://github.com/user-attachments/assets/8e1e6f03-1435-402b-992e-f97add6f588d" />
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+* 🔍 **Macro Detection**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+  * Calories 🔥
+  * Protein 💪
+  * Carbs 🌾
+  * Fats 💧
+  * Food Type 🏷️
 
-## Get a fresh project
+* ⚡ **AI-Powered Insights**
+  Get instant macro breakdowns with minimal input
+ <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06" src="https://github.com/user-attachments/assets/d356b04a-6f28-41ec-8565-014162cea58d" />
 
-When you're ready, run:
+
+* 🧾 **Recent Scans History**
+  View previously analyzed meals
+  <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06 (2)" src="https://github.com/user-attachments/assets/19a2bb3f-e69a-45bd-a834-9e03a5cfa271" />
+
+
+* 🎨 **Modern UI/UX**
+  Clean, dark-themed interface with smooth interactions
+
+---
+
+## 🛠️ Tech Stack
+
+* ⚛️ React Native (Expo)
+* 🧭 Expo Router (file-based routing)
+* 🎨 NativeWind / Tailwind CSS
+* 🤖 AI Integration (custom / API-based food analysis)
+* 📦 Expo Vector Icons
+
+---
+
+## 📦 Installation
+
+1. Clone the repository
 
 ```bash
-npm run reset-project
+git clone  
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+3. Start the app
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 📱 Running the App
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+You can run the app on:
+
+* Android Emulator
+* iOS Simulator
+* Expo Go (quick testing)
+
+---
+
+## 📂 Project Structure
+
+```
+app/
+ ├── (screens)
+ ├── components/
+ │    ├── Feature.tsx
+ │    ├── DetectBar.tsx
+ │    └── ...
+ ├── utils/
+ └── assets/
+```
+
+---
+
+## 🧠 How It Works
+
+1. User uploads or captures a food image
+2. Image is processed by an AI model/API
+3. App extracts:
+
+   * Nutritional data
+   * Food classification
+4. Results are displayed in a clean dashboard
+
+---
+
+## 🔮 Future Improvements
+
+* 🍱 Meal tracking & daily summaries
+* 📊 Macro charts & analytics
+* 🧑‍🍳 Food suggestions based on goals
+* ☁️ Cloud sync & user accounts
+* 🎯 Fitness goal integration
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repo
+2. Create a new branch
+3. Submit a pull request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 💡 Inspiration
+
+Built to simplify nutrition tracking using AI and eliminate manual calorie counting.
+
+---
+
+## ⭐ Support
+
+If you like this project, consider giving it a star ⭐ on GitHub!
