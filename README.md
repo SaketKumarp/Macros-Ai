@@ -67,7 +67,7 @@ Clean, dark-themed interface with smooth interactions
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/ai-macro-tracker.git
+git clone [https://github.com/your-username/ai-macro-tracker.git](https://github.com/SaketKumarp/Macros-Ai.git)
 cd ai-macro-tracker
 npm install
 npx expo start
