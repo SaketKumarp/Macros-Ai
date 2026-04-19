@@ -1,6 +1,8 @@
 import EatenCard, { EatenCardProps } from "@/components/frontend/Eaten-Card";
 import { MacroCard } from "@/components/frontend/Macro-card";
 import { MacroRing } from "@/components/frontend/Macro-ring";
+import { NoMeals } from "@/components/frontend/No-Meal";
+
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/providers/toast";
 
@@ -161,9 +163,7 @@ export default function Index() {
               Loading meals...
             </Text>
           ) : meals.length === 0 ? (
-            <Text className="text-gray-400 text-center mt-4">
-              it seems u have not eaten yet !{" "}
-            </Text>
+            <NoMeals onAddMeal={() => console.log("onadd meal")} />
           ) : (
             meals.map((item) => (
               <EatenCard
