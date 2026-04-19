@@ -8,62 +8,68 @@ Built with **Expo (React Native)** for a fast, cross-platform experience.
 
 ## 🚀 Features
 
-* 📸 **Food Image Recognition**
-  Capture or upload food images and let AI analyze them
+### 📸 Food Image Recognition
 
-  <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06 (1)" src="https://github.com/user-attachments/assets/8e1e6f03-1435-402b-992e-f97add6f588d" />
+Capture or upload food images and let AI analyze them
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8e1e6f03-1435-402b-992e-f97add6f588d" width="260" />
+</p>
 
-* 🔍 **Macro Detection**
+---
 
-  * Calories 🔥
-  * Protein 💪
-  * Carbs 🌾
-  * Fats 💧
-  * Food Type 🏷️
+### 🔍 Macro Detection
 
-* ⚡ **AI-Powered Insights**
-  Get instant macro breakdowns with minimal input
- <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06" src="https://github.com/user-attachments/assets/d356b04a-6f28-41ec-8565-014162cea58d" />
+* Calories 🔥
+* Protein 💪
+* Carbs 🌾
+* Fats 💧
+* Food Type 🏷️
 
+---
 
-* 🧾 **Recent Scans History**
-  View previously analyzed meals
-  <img width="738" height="1600" alt="WhatsApp Image 2026-04-20 at 00 41 06 (2)" src="https://github.com/user-attachments/assets/19a2bb3f-e69a-45bd-a834-9e03a5cfa271" />
+### ⚡ AI-Powered Insights
 
+Get instant macro breakdowns with minimal input
 
-* 🎨 **Modern UI/UX**
-  Clean, dark-themed interface with smooth interactions
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d356b04a-6f28-41ec-8565-014162cea58d" width="260" />
+</p>
+
+---
+
+### 🧾 Recent Scans History
+
+View previously analyzed meals
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/19a2bb3f-e69a-45bd-a834-9e03a5cfa271" width="260" />
+</p>
+
+---
+
+### 🎨 Modern UI/UX
+
+Clean, dark-themed interface with smooth interactions
 
 ---
 
 ## 🛠️ Tech Stack
 
 * ⚛️ React Native (Expo)
-* 🧭 Expo Router (file-based routing)
-* 🎨 NativeWind / Tailwind CSS
-* 🤖 AI Integration (custom / API-based food analysis)
+* 🧭 Expo Router
+* 🎨 NativeWind (Tailwind CSS)
+* 🤖 AI Integration
 * 📦 Expo Vector Icons
 
 ---
 
 ## 📦 Installation
 
-1. Clone the repository
-
 ```bash
-git clone  
-```
-
-2. Install dependencies
-
-```bash
+git clone https://github.com/your-username/ai-macro-tracker.git
+cd ai-macro-tracker
 npm install
-```
-
-3. Start the app
-
-```bash
 npx expo start
 ```
 
@@ -71,11 +77,9 @@ npx expo start
 
 ## 📱 Running the App
 
-You can run the app on:
-
 * Android Emulator
 * iOS Simulator
-* Expo Go (quick testing)
+* Expo Go
 
 ---
 
@@ -83,61 +87,49 @@ You can run the app on:
 
 ```
 app/
- ├── (screens)
- ├── components/
- │    ├── Feature.tsx
- │    ├── DetectBar.tsx
- │    └── ...
- ├── utils/
- └── assets/
+ ├── (auth)
+ ├── (tabs)
+ ├── screens/
+components/
+hooks/
+lib/
+assets/
 ```
 
 ---
 
 ## 🧠 How It Works
 
-1. User uploads or captures a food image
-2. Image is processed by an AI model/API
-3. App extracts:
+1. Capture or upload food image
+2. AI processes the image
+3. Extracts:
 
-   * Nutritional data
-   * Food classification
-4. Results are displayed in a clean dashboard
+   * Calories
+   * Protein
+   * Carbs
+   * Fats
+   * Food type
+4. Displays results instantly
 
 ---
 
 ## 🔮 Future Improvements
 
-* 🍱 Meal tracking & daily summaries
-* 📊 Macro charts & analytics
-* 🧑‍🍳 Food suggestions based on goals
-* ☁️ Cloud sync & user accounts
-* 🎯 Fitness goal integration
+* 🍱 Meal tracking
+* 📊 Analytics dashboard
+* ☁️ Cloud sync
+* 🎯 Goal-based recommendations
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome!
-
 1. Fork the repo
-2. Create a new branch
-3. Submit a pull request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 💡 Inspiration
-
-Built to simplify nutrition tracking using AI and eliminate manual calorie counting.
+2. Create a branch
+3. Submit PR
 
 ---
 
 ## ⭐ Support
 
-If you like this project, consider giving it a star ⭐ on GitHub!
+If you like this project, give it a star ⭐
