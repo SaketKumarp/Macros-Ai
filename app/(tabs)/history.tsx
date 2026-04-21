@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import HistoryMealCard from "@/components/frontend/History-Card";
+import HistoryMealCard from "@/components/frontend/macros/History-Card";
 import { Ionicons } from "@expo/vector-icons";
 
 const History = () => {

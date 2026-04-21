@@ -1,7 +1,9 @@
-import EatenCard, { EatenCardProps } from "@/components/frontend/Eaten-Card";
-import { MacroCard } from "@/components/frontend/Macro-card";
-import { MacroRing } from "@/components/frontend/Macro-ring";
-import { NoMeals } from "@/components/frontend/No-Meal";
+import EatenCard, {
+  EatenCardProps,
+} from "@/components/frontend/macros/Eaten-Card";
+import { MacroCard } from "@/components/frontend/macros/Macro-card";
+import { MacroRing } from "@/components/frontend/macros/Macro-ring";
+import { NoMeals } from "@/components/frontend/meal/No-Meal";
 
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/providers/toast";
@@ -33,68 +35,6 @@ export default function Index() {
   meals.map((meal) => (fatEaten += meal.fat));
   console.log("eaten calories of today", eatenCalories);
 
-  // const dummyData: EatenCardProps[] = [
-  //   {
-  //     id: 1,
-  //     name: "Chicken Rice",
-  //     calories: 450,
-  //     protein: 35,
-  //     carbs: 50,
-  //     fat: 12,
-  //     sugar: 5,
-  //     type: "protein",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Oats with Milk",
-  //     calories: 300,
-  //     protein: 15,
-  //     carbs: 40,
-  //     fat: 8,
-  //     sugar: 10,
-  //     type: "carb",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Peanut Butter Toast",
-  //     calories: 350,
-  //     protein: 12,
-  //     carbs: 30,
-  //     fat: 18,
-  //     sugar: 6,
-  //     type: "protein",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Cold Drink",
-  //     calories: 120,
-  //     protein: 0,
-  //     carbs: 30,
-  //     fat: 0,
-  //     sugar: 25,
-  //     type: "drink",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Burger",
-  //     calories: 500,
-  //     protein: 20,
-  //     carbs: 45,
-  //     fat: 25,
-  //     sugar: 8,
-  //     type: "fastfood",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Chips",
-  //     calories: 250,
-  //     protein: 5,
-  //     carbs: 20,
-  //     fat: 15,
-  //     sugar: 2,
-  //     type: "snack",
-  //   },
-  // ];
   //TODO:i have to take total maximum calories and total macros from user or may be i need to calculate it somehow using bmi of the user
   if (!isSignedIn) {
     return <Redirect href={"/(auth)/sign-in"} />;

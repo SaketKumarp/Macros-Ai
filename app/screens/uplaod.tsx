@@ -16,14 +16,14 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { cloudinaryApi } from "@/lib/api";
-import MealCard from "@/components/frontend/Meal-Card";
+import MealCard from "@/components/frontend/meal/Meal-Card";
 import { analyzeImageFront } from "@/lib/gemini";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/providers/toast";
 import { useRouter } from "expo-router";
-import { RecentScans } from "@/components/frontend/RecentScans";
-import DetectBar from "@/components/frontend/Detect-Section";
+import { RecentScans } from "@/components/frontend/meal/RecentScans";
+import DetectBar from "@/components/frontend/macros/Detect-Section";
 
 const Upload = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -186,7 +186,7 @@ const Upload = () => {
 
         {/* 🤖 AI SECTION */}
         <LinearGradient
-          colors={["#be2edd", "#7ed6df"]}
+          colors={["#d63031", "#e84393"]}
           className="mt-6 rounded-3xl p-5"
         >
           <View className="flex-row items-center justify-between mb-2">
@@ -235,12 +235,5 @@ const Upload = () => {
     </SafeAreaView>
   );
 };
-
-const Feature = ({ icon, label, color }: any) => (
-  <View className="items-center">
-    <Ionicons name={icon} size={18} color={color} />
-    <Text className="text-gray-400 text-xs mt-1">{label}</Text>
-  </View>
-);
 
 export default Upload;
