@@ -1,33 +1,33 @@
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BurnHero } from "@/components/frontend/burn/Burn-Hero";
-import { QuickActions } from "@/components/frontend/burn/Quick-Action";
-import ActivityList from "@/components/frontend/burn/Activity-List";
 import { QuickActionCard } from "@/components/frontend/burn/Quick-Action-Card";
+import { TodayActivityCard } from "@/components/frontend/burn/Today-Acticity-Card";
 
 const CaloriesScreen = () => {
   const burned = 540;
   const goal = 700;
 
-  const activities = [
-    { name: "Running", duration: 30, calories: 240 },
-    { name: "Walking", duration: 20, calories: 80 },
-  ];
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#09090b" }}>
+    <View className="flex-1 bg-black px-2 pt-10">
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{
+          paddingHorizontal: 12,
+          paddingTop: 16,
+          paddingBottom: 100, // 👈 important for tab space
+          gap: 16,
+        }}
       >
         <BurnHero burned={burned} goal={goal} />
-        {/* <QuickActions /> */}
+
         <QuickActionCard />
-        <ActivityList data={activities} />
+
+        {/* 👇 Just render it normally */}
+        <TodayActivityCard />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

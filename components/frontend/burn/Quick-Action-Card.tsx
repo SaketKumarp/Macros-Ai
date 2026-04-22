@@ -15,23 +15,15 @@ const actions = [
   { label: "Cycling", icon: Bike },
   { label: "Gym", icon: Dumbbell },
   { label: "Yoga", icon: Footprints },
-  { label: "More", icon: Plus },
 ];
 
 export const QuickActionCard = () => {
   return (
-    <Card className="bg-[#1c1c1e] rounded-2xl px-4 py-4 mr-2 ml-2">
+    <Card className="bg-[#202020] rounded-2xl px-6 py-4 mr-2 ml-2">
       {/* Header */}
-      <View className="flex-row justify-between items-center mb-2">
+      <View className="flex-row justify-between items-center ">
         <Text className="text-base font-semibold text-white">
           Quick Add Activity
-        </Text>
-
-        <Text
-          onPress={() => console.log("make a view all component")}
-          className="text-[#ff7a00] font-medium"
-        >
-          View All
         </Text>
       </View>
 
@@ -52,7 +44,7 @@ export const QuickActionCard = () => {
               </View>
 
               {/* Label */}
-              <Text className="text-xs text-[#a1a1aa]">{item.label}</Text>
+              <Text className="text-xs text-white">{item.label}</Text>
             </TouchableOpacity>
           );
         })}
