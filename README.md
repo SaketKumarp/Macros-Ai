@@ -8,17 +8,13 @@ Built with **Expo (React Native)** for a fast, cross-platform experience.
 
 ## 🚀 Features
 
-### 📸 Food Image Recognition
-
-Capture or upload food images and let AI analyze them
+### 📸 Food Recognition + 🔍 Macro Detection + ⚡ Insights
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8e1e6f03-1435-402b-992e-f97add6f588d" width="260" />
+  <img src="https://github.com/user-attachments/assets/8e1e6f03-1435-402b-992e-f97add6f588d" width="220" />
+  <img src="https://github.com/user-attachments/assets/d356b04a-6f28-41ec-8565-014162cea58d" width="220" />
+  <img src="https://github.com/user-attachments/assets/2ed6ae32-dda3-4450-80e7-62ae5c49368e" width="220" />
 </p>
-
----
-
-### 🔍 Macro Detection
 
 * Calories 🔥
 * Protein 💪
@@ -28,32 +24,17 @@ Capture or upload food images and let AI analyze them
 
 ---
 
-### ⚡ AI-Powered Insights
-
-Get instant macro breakdowns with minimal input
+### 🧾 Recent Scans
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d356b04a-6f28-41ec-8565-014162cea58d" width="260" />
-</p>
-
----
-## Track of calorie Burnt
-<img width="260"  alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-04-22 at 19 08 18" src="https://github.com/user-attachments/assets/2ed6ae32-dda3-4450-80e7-62ae5c49368e" />
-
-
-### 🧾 Recent Scans History
-
-View previously analyzed meals
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/19a2bb3f-e69a-45bd-a834-9e03a5cfa271" width="260" />
+  <img src="https://github.com/user-attachments/assets/19a2bb3f-e69a-45bd-a834-9e03a5cfa271" width="240" />
 </p>
 
 ---
 
-### 🎨 Modern UI/UX
+### 🎨 UI
 
-Clean, dark-themed interface with smooth interactions
+Clean, modern dark UI with smooth UX.
 
 ---
 
@@ -61,16 +42,15 @@ Clean, dark-themed interface with smooth interactions
 
 * ⚛️ React Native (Expo)
 * 🧭 Expo Router
-* 🎨 NativeWind (Tailwind CSS)
+* 🎨 NativeWind
 * 🤖 AI Integration
-* 📦 Expo Vector Icons
 
 ---
 
-## 📦 Installation
+## 📦 Setup
 
 ```bash
-git clone [https://github.com/your-username/ai-macro-tracker.git](https://github.com/SaketKumarp/Macros-Ai.git)
+git clone https://github.com/SaketKumarp/Macros-Ai.git
 cd Macro_tracker
 npm install
 npm start
@@ -78,61 +58,15 @@ npm start
 
 ---
 
-## 📱 Running the App
-
-* Android Emulator
-* iOS Simulator
-* Expo Go
-
----
-
-## 📂 Project Structure
-
-```
-app/
- ├── (auth)
- ├── (tabs)
- ├── screens/
-components/
-hooks/
-lib/
-assets/
-```
-
----
-
-## 🧠 How It Works
-
-1. Capture or upload food image
-2. AI processes the image
-3. Extracts:
-
-   * Calories
-   * Protein
-   * Carbs
-   * Fats
-   * Food type
-4. Displays results instantly
-
----
-
-## 🔮 Future Improvements
+## 🔮 Coming Soon
 
 * 🍱 Meal tracking
 * 📊 Analytics dashboard
 * ☁️ Cloud sync
-* 🎯 Goal-based recommendations
-
----
-
-## 🤝 Contributing
-
-1. Fork the repo
-2. Create a branch
-3. Submit PR
+* 🎯 Goal-based insights
 
 ---
 
 ## ⭐ Support
 
-If you like this project, give it a star ⭐
+Give it a star ⭐ if you like it
