@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Svg, {
   Path,
   Defs,
@@ -6,56 +6,105 @@ import Svg, {
   Stop,
   ClipPath,
 } from "react-native-svg";
+import Animated, {
+  useSharedValue,
+  withTiming,
+  withRepeat,
+  useAnimatedProps,
+  interpolate,
+  Easing,
+} from "react-native-reanimated";
+
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 interface ProgressProps {
   progress: number; // 0 → 1
 }
 
 export const FlameProgress = ({ progress }: ProgressProps) => {
-  const height = 120;
-  const fillLevel = height * (1 - progress);
+  // 🔥 animated progress
+  const progressSV = useSharedValue(0);
 
+  // 🌊 wave animation
+  const wave = useSharedValue(0);
+
+  useEffect(() => {
+    // smooth fill with easing (important)
+    progressSV.value = withTiming(progress, {
+      duration: 2500,
+      easing: Easing.out(Easing.cubic),
+    });
+
+    // slower smoother wave
+    wave.value = withRepeat(
+      withTiming(Math.PI * 2, { duration: 2500 }),
+      -1,
+      false,
+    );
+  }, [progress, progressSV, wave]);
+
+  const animatedProps = useAnimatedProps(() => {
+    const fillLevel = interpolate(progressSV.value, [0, 1], [120, 10]);
+
+    // 🌊 natural sine wave
+    const baseAmplitude = 6;
+
+    // reduce wave when settled (more premium feel)
+    const settleFactor = interpolate(progressSV.value, [0, 1], [1.2, 0.6]);
+
+    const w = Math.sin(wave.value) * baseAmplitude * settleFactor;
+
+    return {
+      d: `
+      M0 ${fillLevel}
+      C20 ${fillLevel + w} 40 ${fillLevel - w} 50 ${fillLevel}
+      C60 ${fillLevel + w} 80 ${fillLevel - w} 100 ${fillLevel}
+      L100 120
+      L0 120
+      Z
+    `,
+    };
+  });
   return (
     <Svg width={180} height={220} viewBox="0 0 100 120">
       <Defs>
         {/* 🔥 Gradient */}
         <LinearGradient id="grad" x1="0" y1="1" x2="0" y2="0">
           <Stop offset="0%" stopColor="#f97316" />
-          <Stop offset="100%" stopColor="#fb923c" />
+          <Stop offset="50%" stopColor="#fb923c" />
+          <Stop offset="100%" stopColor="#fde68a" />
         </LinearGradient>
 
-        {/* 🔥 Clip flame */}
+        {/* 🔥 Improved flame shape */}
         <ClipPath id="clip">
           <Path
-            d="M50 5 
-            C35 35, 15 50, 25 85 
-            C35 110, 65 110, 75 85 
-            C85 50, 65 35, 50 5 Z"
+            d="
+            M50 5
+            C30 35, 15 55, 25 85
+            C35 110, 65 110, 75 85
+            C85 55, 70 35, 50 5 Z
+          "
           />
         </ClipPath>
       </Defs>
 
-      {/* 🔥 Flame outline */}
+      {/* 🔥 Outer glow */}
       <Path
-        d="M50 5 
-          C35 35, 15 50, 25 85 
-          C35 110, 65 110, 75 85 
-          C85 50, 65 35, 50 5 Z"
+        d="
+          M50 5
+          C30 35, 15 55, 25 85
+          C35 110, 65 110, 75 85
+          C85 55, 70 35, 50 5 Z
+        "
         fill="none"
         stroke="#fbbf24"
         strokeWidth={2}
+        strokeOpacity={0.6}
       />
 
-      {/* 🔥 Liquid fill with wave */}
-      <Path
-        d={`
-          M0 ${fillLevel}
-          Q25 ${fillLevel - 5} 50 ${fillLevel}
-          Q75 ${fillLevel + 5} 100 ${fillLevel}
-          L100 120
-          L0 120
-          Z
-        `}
+      {/* 🔥 Animated fill */}
+      <AnimatedPath
+        animatedProps={animatedProps}
         fill="url(#grad)"
         clipPath="url(#clip)"
       />

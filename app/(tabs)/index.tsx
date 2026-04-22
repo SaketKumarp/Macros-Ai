@@ -76,7 +76,7 @@ export default function Index() {
           label="Protein"
           value={proteinEaten}
           color="#be2edd"
-          maxValue={160}
+          maxValue={100}
         />
         <MacroCard
           label="Carbs"
