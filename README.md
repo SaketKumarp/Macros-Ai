@@ -37,6 +37,9 @@ Get instant macro breakdowns with minimal input
 </p>
 
 ---
+## Track of calorie Burnt
+<img width="260"  alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-04-22 at 19 08 18" src="https://github.com/user-attachments/assets/2ed6ae32-dda3-4450-80e7-62ae5c49368e" />
+
 
 ### 🧾 Recent Scans History
 
