@@ -1,3 +1,4 @@
+import { ProfileSheet } from "@/components/auth/Profile-Sheet";
 import EatenCard, {
   EatenCardProps,
 } from "@/components/frontend/macros/Eaten-Card";
@@ -11,13 +12,15 @@ import { useToast } from "@/providers/toast";
 import { useClerk, useUser } from "@clerk/expo";
 import { useQuery } from "convex/react";
 import { Redirect, useRouter } from "expo-router";
+import { useState } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 
 export default function Index() {
   const { isSignedIn, user } = useUser();
-  const { signOut } = useClerk();
+
   const { showToast } = useToast();
   const router = useRouter();
+  const [profileOpen, setprofileOpen] = useState(false);
 
   const mealData = useQuery(api.macros.getTodayMeals);
   const mealLoading = mealData === undefined;
@@ -41,8 +44,7 @@ export default function Index() {
   }
 
   const handleSignOut = () => {
-    signOut();
-    showToast("logged out", "success");
+    setprofileOpen(true);
   };
 
   return (
@@ -128,6 +130,10 @@ export default function Index() {
       >
         <Text className="text-black text-2xl font-bold">+</Text>
       </TouchableOpacity>
+      <ProfileSheet
+        visible={profileOpen}
+        onClose={() => setprofileOpen(false)}
+      />
     </View>
   );
 }
