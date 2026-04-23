@@ -7,7 +7,7 @@ Built with **Expo (React Native)** for a fast, cross-platform experience.
 ---
 
 ## 🚀 Features
-
+hehe
 ### 📸 Food Recognition + 🔍 Macro Detection + ⚡ Insights
 
 <p align="center">
