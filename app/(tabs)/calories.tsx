@@ -4,7 +4,7 @@ import React from "react";
 import { BurnHero } from "@/components/frontend/burn/Burn-Hero";
 import { QuickActionCard } from "@/components/frontend/burn/Quick-Action-Card";
 import { TodayActivityCard } from "@/components/frontend/burn/Today-Acticity-Card";
-import { CaloriesBreakdownBar } from "@/components/frontend/burn/Calorie-Bar";
+
 import { CaloriesPieChart } from "@/components/frontend/burn/calorie-pie";
 
 const CaloriesScreen = () => {
@@ -24,7 +24,7 @@ const CaloriesScreen = () => {
       >
         <BurnHero burned={burned} goal={goal} />
         <QuickActionCard />
-        {/* 👇 Just render it normally */}
+
         <TodayActivityCard />
         {/* <CaloriesBreakdownBar
           data={[
@@ -39,7 +39,7 @@ const CaloriesScreen = () => {
             { label: "Running", burned: 240, color: "#eb4d4b" },
             { label: "Walking", burned: 80, color: "#8e44ad" },
             { label: "Cycling", burned: 120, color: "#2ecc71" },
-            { label: "gym", burned: 500, color: "#3498db" },
+            { label: "gym", burned: 50, color: "#3498db" },
           ]}
         />
       </ScrollView>

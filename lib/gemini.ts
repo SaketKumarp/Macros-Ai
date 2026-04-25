@@ -26,6 +26,7 @@ Analyze this food image.
 Return ONLY valid JSON.
 Do NOT include any explanation or markdown.
 if it is not a food return everything as zero
+and in name fill NA
 
 {
   "name": "",
@@ -41,9 +42,8 @@ if it is not a food return everything as zero
   ]);
 
   const text = result.response.text();
-  console.log("RAW GEMINI:", text); // 👈 debug
+  console.log("GEMINI response : ", text);
 
-  // 🔥 BEST CLEANING METHOD
   const match = text.match(/{[\s\S]*}/);
 
   if (!match) {
