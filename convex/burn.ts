@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 const BASE_MET = {
@@ -81,6 +81,55 @@ export const addActivity = mutation({
 
     return {
       calories,
+      avgSpeed,
+    };
+  },
+});
+
+export const getTodaysActivity = query({
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) {
+      return {
+        totalCalories: 0,
+        totalDistance: 0,
+        totalDuration: 0,
+        avgSpeed: 0,
+      };
+    }
+
+    const now = Date.now();
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const start = startOfDay.getTime();
+
+    const activities = await ctx.db
+      .query("activities")
+      .withIndex("by_user_time", (q) =>
+        q
+          .eq("userId", user.subject)
+          .gte("createdAt", start)
+          .lt("createdAt", now),
+      )
+      .collect();
+
+    let totalCalories = 0;
+    let totalDistance = 0;
+    let totalDuration = 0;
+
+    for (const act of activities) {
+      totalCalories += act.calories;
+      totalDistance += act.distance;
+      totalDuration += act.duration;
+    }
+
+    const avgSpeed = totalDuration > 0 ? totalDistance / totalDuration : 0;
+
+    return {
+      totalCalories,
+      totalDistance,
+      totalDuration,
       avgSpeed,
     };
   },

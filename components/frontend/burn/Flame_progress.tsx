@@ -28,20 +28,32 @@ export const FlameProgress = ({ progress }: ProgressProps) => {
   // 🌊 wave animation
   const wave = useSharedValue(0);
 
-  useEffect(() => {
-    // smooth fill with easing (important)
-    progressSV.value = withTiming(progress, {
-      duration: 2500,
-      easing: Easing.out(Easing.cubic),
-    });
+  // useEffect(() => {
+  //   // smooth fill with easing (important)
+  //   progressSV.value = withTiming(progress, {
+  //     duration: 2500,
+  //     easing: Easing.out(Easing.cubic),
+  //   });
 
-    // slower smoother wave
-    wave.value = withRepeat(
-      withTiming(Math.PI * 2, { duration: 2500 }),
-      -1,
-      false,
-    );
-  }, [progress, progressSV, wave]);
+  //   // slower smoother wave
+  //   wave.value = withRepeat(
+  //     withTiming(Math.PI * 2, { duration: 2500 }),
+  //     -1,
+  //     false,
+  //   );
+  // }, [progress, progressSV, wave]);
+
+  const prev = useSharedValue(0);
+
+  useEffect(() => {
+    if (Math.abs(progress - prev.value) > 0.01) {
+      progressSV.value = withTiming(progress, {
+        duration: 1200,
+        easing: Easing.out(Easing.cubic),
+      });
+      prev.value = progress;
+    }
+  }, [progress, prev, progressSV]);
 
   const animatedProps = useAnimatedProps(() => {
     const fillLevel = interpolate(progressSV.value, [0, 1], [120, 10]);

@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
+import { useToast } from "@/providers/toast";
 
 interface Props {
   isTracking: boolean;
@@ -18,6 +19,8 @@ export const TrackingControls = ({
   onResume,
   onStop,
 }: Props) => {
+
+  const {showToast}= useToast()
   return (
     <View className="flex-row gap-3 justify-center">
       {!isTracking ? (

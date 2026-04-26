@@ -2,12 +2,13 @@ import { View, Text } from "react-native";
 import { FlameProgress } from "./Flame_progress";
 
 interface Props {
-  burned: number;
+  liveBurned: number;
   goal: number;
+  totalBurned: number;
 }
 
-export const BurnHero = ({ burned, goal }: Props) => {
-  const progress = Math.min(burned / goal, 1);
+export const BurnHero = ({ liveBurned, totalBurned, goal }: Props) => {
+  const progress = Math.min((totalBurned + liveBurned) / goal, 1);
 
   return (
     <View className="items-center py-6">
@@ -16,7 +17,9 @@ export const BurnHero = ({ burned, goal }: Props) => {
         {/* LEFT */}
         <View className="flex-1 items-center">
           <Text className="text-zinc-400 text-sm">Burned</Text>
-          <Text className="text-3xl font-bold text-orange-500">{burned}</Text>
+          <Text className="text-3xl font-bold text-orange-500">
+            {Math.round(totalBurned)}
+          </Text>
           <Text className="text-zinc-500 text-xs">kcal</Text>
         </View>
 

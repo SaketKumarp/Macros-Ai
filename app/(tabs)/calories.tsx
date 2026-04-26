@@ -7,13 +7,12 @@ import { TodayActivityCard } from "@/components/frontend/burn/Today-Acticity-Car
 import { CaloriesPieChart } from "@/components/frontend/burn/calorie-pie";
 
 import { useLiveTracking } from "@/hooks/use-Live-Tracking";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { LiveSessionCard } from "@/components/frontend/burn/Live-session-card";
 import { TrackingControls } from "@/components/frontend/burn/Tracking-controls";
 
 const CaloriesScreen = () => {
-  const goal = 700;
   const weight = 80;
 
   const {
@@ -25,17 +24,23 @@ const CaloriesScreen = () => {
     pause,
     resume,
     stop,
+    reset,
   } = useLiveTracking("running", weight);
 
   const mutation = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
-  const [sessionCal, setSessioncal] = useState<number>(0);
-  let totalcal = 0;
+
+  const data = useQuery(api.burn.getTodaysActivity);
+  const dbCalories = data?.totalCalories ?? 0;
+  console.log(dbCalories);
+
+  const liveCalories = isTracking ? calories : 0;
+
+  const totalBurned = dbCalories;
 
   const handleStop = async () => {
     const result = stop();
-    totalcal += result.calories;
-    setSessioncal(totalcal);
+
     if (!result) return;
 
     try {
@@ -47,6 +52,7 @@ const CaloriesScreen = () => {
         distance: result.distance,
         avgSpeed: result.avgSpeed,
       });
+      reset();
     } catch (err) {
       console.log("Save failed", err);
     } finally {
@@ -65,7 +71,11 @@ const CaloriesScreen = () => {
           gap: 16,
         }}
       >
-        <BurnHero burned={sessionCal} goal={goal} />
+        <BurnHero
+          liveBurned={liveCalories}
+          totalBurned={totalBurned}
+          goal={100}
+        />
 
         <LiveSessionCard
           duration={duration}

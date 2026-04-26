@@ -85,13 +85,11 @@ export const useLiveTracking = (type: ActivityType, weight: number) => {
 
   // 🛑 STOP
   const stop = () => {
-    // stop timer
     if (timer.current) {
       clearInterval(timer.current);
       timer.current = null;
     }
 
-    // stop GPS
     if (locationSub.current) {
       locationSub.current.remove();
       locationSub.current = null;
@@ -99,23 +97,14 @@ export const useLiveTracking = (type: ActivityType, weight: number) => {
 
     setIsTracking(false);
 
-    // compute avg speed safely
     const avgSpeed = duration > 0 ? distance / duration : 0;
 
-    const result = {
+    return {
       distance,
       duration,
       calories,
       avgSpeed,
     };
-
-    // 🔥 reset state for next session
-    setDistance(0);
-    setDuration(0);
-    setCalories(0);
-    prevLocation.current = null;
-
-    return result;
   };
 
   // 🔥 live calorie calculation
@@ -135,6 +124,12 @@ export const useLiveTracking = (type: ActivityType, weight: number) => {
 
   // ⚡ derived speed (real-time)
   const speed = duration > 0 ? distance / duration : 0;
+  const reset = () => {
+    setDistance(0);
+    setDuration(0);
+    setCalories(0);
+    prevLocation.current = null;
+  };
 
   return {
     distance,
@@ -146,5 +141,6 @@ export const useLiveTracking = (type: ActivityType, weight: number) => {
     pause,
     resume,
     stop,
+    reset,
   };
 };
