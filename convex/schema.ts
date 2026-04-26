@@ -26,11 +26,40 @@ export default defineSchema({
     protein: v.number(),
     carbs: v.number(),
     fat: v.number(),
-  }),
+  }), // this is for set-up of goal using ai and in general formula
 
   weights: defineTable({
     userId: v.string(),
     weight: v.number(),
-    date: v.string(),
-  }),
+    createdAt: v.number(),
+  }).index("by_user_date", ["userId", "createdAt"]),
+
+  users: defineTable({
+    userId: v.string(),
+    name: v.string(),
+    weight: v.number(), // current weight (fast access)
+    age: v.number(),
+  }).index("by_userId", ["userId"]),
+
+  activities: defineTable({
+    userId: v.string(),
+
+    type: v.union(
+      v.literal("walking"),
+      v.literal("running"),
+      v.literal("cycling"),
+      v.literal("gym"),
+    ),
+
+    duration: v.number(), // seconds
+    distance: v.number(), // meters
+
+    avgSpeed: v.number(), // m/s  
+
+    calories: v.number(),
+
+    source: v.optional(v.union(v.literal("manual"), v.literal("gps"))),
+
+    createdAt: v.number(), //  timestamp only
+  }).index("by_user_time", ["userId", "createdAt"]),
 });

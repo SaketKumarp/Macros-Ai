@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as burn from "../burn.js";
 import type * as macros from "../macros.js";
 import type * as test from "../test.js";
 
@@ -18,6 +19,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  burn: typeof burn;
   macros: typeof macros;
   test: typeof test;
 }>;
