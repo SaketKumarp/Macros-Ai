@@ -29,9 +29,13 @@ const CaloriesScreen = () => {
 
   const mutation = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
+  const [sessionCal, setSessioncal] = useState<number>(0);
+  let totalcal = 0;
 
   const handleStop = async () => {
     const result = stop();
+    totalcal += result.calories;
+    setSessioncal(totalcal);
     if (!result) return;
 
     try {
@@ -61,7 +65,7 @@ const CaloriesScreen = () => {
           gap: 16,
         }}
       >
-        <BurnHero burned={calories} goal={goal} />
+        <BurnHero burned={sessionCal} goal={goal} />
 
         <LiveSessionCard
           duration={duration}

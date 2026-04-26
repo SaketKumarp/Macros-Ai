@@ -13,6 +13,7 @@ import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
+ 
 
 const SignUp = () => {
   const { signUp, errors, fetchStatus } = useSignUp();
@@ -24,6 +25,7 @@ const SignUp = () => {
 
   const loading = fetchStatus === "fetching";
   const { showToast } = useToast();
+
 
   const onSignUp = async () => {
     try {

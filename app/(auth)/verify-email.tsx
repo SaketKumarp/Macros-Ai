@@ -13,6 +13,8 @@ import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const VerifyEmail = () => {
   const { signUp, fetchStatus } = useSignUp();
@@ -22,6 +24,8 @@ const VerifyEmail = () => {
   const { showToast } = useToast();
 
   const loading = fetchStatus === "fetching";
+
+  const addUser = useMutation(api.test.addUser);
 
   const onVerify = async () => {
     try {
@@ -43,6 +47,11 @@ const VerifyEmail = () => {
               router.push(url as Href);
             }
           },
+        });
+        
+        addUser({
+          weight: 80,
+          age: 24,
         });
         router.replace("/");
         showToast("account Created🔥", "success");

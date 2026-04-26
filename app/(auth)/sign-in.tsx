@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
 
+import { api } from "@/convex/_generated/api";
+
 const SignUp = () => {
   const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
@@ -31,23 +33,27 @@ const SignUp = () => {
       return;
     }
 
-    if (signIn.status === "complete") {
-      await signIn.finalize({
-        navigate: ({ decorateUrl, session }) => {
-          if (session?.currentTask) {
-            console.log(session?.currentTask);
-            return;
-          }
-          const url = decorateUrl("/");
-          if (url.startsWith("http")) {
-            window.location.href = url;
-          } else {
-            router.push(url as Href);
-            showToast("welcome back⚡️", "success");
-          }
-        },
-      });
-    }
+    try {
+      if (signIn.status === "complete") {
+        await signIn.finalize({
+          navigate: ({ decorateUrl, session }) => {
+            if (session?.currentTask) {
+              console.log(session?.currentTask);
+              return;
+            }
+            const url = decorateUrl("/");
+            if (url.startsWith("http")) {
+              window.location.href = url;
+            } else {
+              //TODO: create a screen for user input instead of hardcode data
+
+              router.push(url as Href);
+              showToast("welcome back⚡️", "success");
+            }
+          },
+        });
+      }
+    } catch (error) {}
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
