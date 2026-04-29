@@ -109,7 +109,7 @@ export const FlameProgress = ({ progress }: ProgressProps) => {
           C85 55, 70 35, 50 5 Z
         "
         fill="none"
-        stroke="#fbbf24"
+        stroke={"#fbbf24"}
         strokeWidth={2}
         strokeOpacity={0.6}
       />

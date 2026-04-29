@@ -5,6 +5,8 @@ import { ConvexReactClient } from "convex/react";
 import { tokenCache } from "@clerk/expo/token-cache";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ToastProvider } from "@/providers/toast";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!);
 
@@ -27,7 +29,9 @@ export default function RootLayout() {
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <ConvexClientProvider>
         <ToastProvider>
-          <Stack screenOptions={{ headerShown: false }} />
+          <Provider store={store}>
+            <Stack screenOptions={{ headerShown: false }} />
+          </Provider>
         </ToastProvider>
       </ConvexClientProvider>
     </ClerkProvider>

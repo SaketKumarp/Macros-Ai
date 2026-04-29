@@ -27,6 +27,7 @@ Return ONLY valid JSON.
 Do NOT include any explanation or markdown.
 if it is not a food return everything as zero
 and in name fill NA
+ 
 
 {
   "name": "",

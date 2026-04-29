@@ -5,6 +5,7 @@ interface Props {
   liveBurned: number;
   goal: number;
   totalBurned: number;
+  isGoalReached?: boolean;
 }
 
 export const BurnHero = ({ liveBurned, totalBurned, goal }: Props) => {

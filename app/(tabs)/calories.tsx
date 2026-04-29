@@ -11,10 +11,15 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { LiveSessionCard } from "@/components/frontend/burn/Live-session-card";
 import { TrackingControls } from "@/components/frontend/burn/Tracking-controls";
+import { useToast } from "@/providers/toast";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setTest } from "@/store/caloriesSlice";
 
 const CaloriesScreen = () => {
   const user = useQuery(api.test.getUser);
   if (!user) console.log("user is undefined");
+  const goal = 40;
 
   const {
     calories,
@@ -31,14 +36,23 @@ const CaloriesScreen = () => {
   const mutation = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
 
+  const { showToast } = useToast();
+  const testValue = useSelector((state: RootState) => state.calories.test);
+
+  const dispatch = useDispatch();
+  dispatch(setTest("redux is ok"));
+
+  // use the VALUE (string)
+  showToast(testValue);
+
   const data = useQuery(api.burn.getTodaysActivity, {});
-  console.log(data);
 
   const dbCalories = data?.totalCalories ?? 0;
 
   const liveCalories = isTracking ? calories : 0;
 
   const totalBurned = dbCalories + (isTracking ? calories : 0);
+  const isGoalReached = totalBurned >= goal;
 
   const handleStop = async () => {
     const result = stop();
@@ -76,7 +90,8 @@ const CaloriesScreen = () => {
         <BurnHero
           liveBurned={liveCalories}
           totalBurned={totalBurned}
-          goal={30}
+          goal={goal}
+          isGoalReached={isGoalReached}
         />
 
         <LiveSessionCard
