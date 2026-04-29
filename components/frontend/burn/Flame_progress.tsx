@@ -9,11 +9,12 @@ import Svg, {
 import Animated, {
   useSharedValue,
   withTiming,
-  withRepeat,
   useAnimatedProps,
   interpolate,
   Easing,
 } from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -22,26 +23,15 @@ interface ProgressProps {
 }
 
 export const FlameProgress = ({ progress }: ProgressProps) => {
+  const isGoalReached = useSelector(
+    (state: RootState) => state.calories.isGoalReached,
+  );
+
   // 🔥 animated progress
   const progressSV = useSharedValue(0);
 
   // 🌊 wave animation
   const wave = useSharedValue(0);
-
-  // useEffect(() => {
-  //   // smooth fill with easing (important)
-  //   progressSV.value = withTiming(progress, {
-  //     duration: 2500,
-  //     easing: Easing.out(Easing.cubic),
-  //   });
-
-  //   // slower smoother wave
-  //   wave.value = withRepeat(
-  //     withTiming(Math.PI * 2, { duration: 2500 }),
-  //     -1,
-  //     false,
-  //   );
-  // }, [progress, progressSV, wave]);
 
   const prev = useSharedValue(0);
 
@@ -82,9 +72,17 @@ export const FlameProgress = ({ progress }: ProgressProps) => {
       <Defs>
         {/* 🔥 Gradient */}
         <LinearGradient id="grad" x1="0" y1="1" x2="0" y2="0">
-          <Stop offset="0%" stopColor="#f97316" />
-          <Stop offset="50%" stopColor="#fb923c" />
-          <Stop offset="100%" stopColor="#fde68a" />
+          {isGoalReached
+            ? [
+                <Stop key="g1" offset="0%" stopColor="#22c55e" />,
+                <Stop key="g2" offset="50%" stopColor="#4ade80" />,
+                <Stop key="g3" offset="100%" stopColor="#bbf7d0" />,
+              ]
+            : [
+                <Stop key="o1" offset="0%" stopColor="#f97316" />,
+                <Stop key="o2" offset="50%" stopColor="#fb923c" />,
+                <Stop key="o3" offset="100%" stopColor="#fde68a" />,
+              ]}
         </LinearGradient>
 
         {/* 🔥 Improved flame shape */}
@@ -109,7 +107,7 @@ export const FlameProgress = ({ progress }: ProgressProps) => {
           C85 55, 70 35, 50 5 Z
         "
         fill="none"
-        stroke={"#fbbf24"}
+        stroke={isGoalReached ? "#22c55e" : "#fbbf24"}
         strokeWidth={2}
         strokeOpacity={0.6}
       />

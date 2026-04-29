@@ -1,5 +1,5 @@
 import { ScrollView, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { BurnHero } from "@/components/frontend/burn/Burn-Hero";
 import { QuickActionCard } from "@/components/frontend/burn/Quick-Action-Card";
@@ -12,14 +12,14 @@ import { api } from "@/convex/_generated/api";
 import { LiveSessionCard } from "@/components/frontend/burn/Live-session-card";
 import { TrackingControls } from "@/components/frontend/burn/Tracking-controls";
 import { useToast } from "@/providers/toast";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { setTest } from "@/store/caloriesSlice";
+import { useDispatch } from "react-redux";
+import { setGoalReached } from "@/store/caloriesSlice";
+import { GoalCelebration } from "@/components/frontend/animation/Goal-Celebration";
 
 const CaloriesScreen = () => {
   const user = useQuery(api.test.getUser);
   if (!user) console.log("user is undefined");
-  const goal = 40;
+  const goal = 35;
 
   const {
     calories,
@@ -37,13 +37,8 @@ const CaloriesScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const { showToast } = useToast();
-  const testValue = useSelector((state: RootState) => state.calories.test);
 
-  const dispatch = useDispatch();
-  dispatch(setTest("redux is ok"));
-
-  // use the VALUE (string)
-  showToast(testValue);
+  //TODO: change the ui on completing the goal
 
   const data = useQuery(api.burn.getTodaysActivity, {});
 
@@ -53,6 +48,11 @@ const CaloriesScreen = () => {
 
   const totalBurned = dbCalories + (isTracking ? calories : 0);
   const isGoalReached = totalBurned >= goal;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setGoalReached(isGoalReached));
+  }, [isGoalReached, dispatch]);
 
   const handleStop = async () => {
     const result = stop();
@@ -78,6 +78,7 @@ const CaloriesScreen = () => {
 
   return (
     <View className="flex-1 bg-black px-2 pt-10">
+      <GoalCelebration />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

@@ -28,11 +28,11 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <ConvexClientProvider>
-        <ToastProvider>
-          <Provider store={store}>
+        <Provider store={store}>
+          <ToastProvider>
             <Stack screenOptions={{ headerShown: false }} />
-          </Provider>
-        </ToastProvider>
+          </ToastProvider>
+        </Provider>
       </ConvexClientProvider>
     </ClerkProvider>
   );
