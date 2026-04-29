@@ -97,9 +97,7 @@ export const getTodaysActivity = query({
         avgSpeed: 0,
       };
     }
-
-    const now = Date.now();
-
+ 
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
     const start = startOfDay.getTime();
@@ -107,10 +105,7 @@ export const getTodaysActivity = query({
     const activities = await ctx.db
       .query("activities")
       .withIndex("by_user_time", (q) =>
-        q
-          .eq("userId", user.subject)
-          .gte("createdAt", start)
-          .lt("createdAt", now),
+        q.eq("userId", user.subject).gte("createdAt", start),
       )
       .collect();
 
@@ -125,6 +120,7 @@ export const getTodaysActivity = query({
     }
 
     const avgSpeed = totalDuration > 0 ? totalDistance / totalDuration : 0;
+    console.log("total cal : ", totalCalories);
 
     return {
       totalCalories,

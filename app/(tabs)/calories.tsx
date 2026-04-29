@@ -13,7 +13,8 @@ import { LiveSessionCard } from "@/components/frontend/burn/Live-session-card";
 import { TrackingControls } from "@/components/frontend/burn/Tracking-controls";
 
 const CaloriesScreen = () => {
-  const weight = 80;
+  const user = useQuery(api.test.getUser);
+  if (!user) console.log("user is undefined");
 
   const {
     calories,
@@ -25,18 +26,19 @@ const CaloriesScreen = () => {
     resume,
     stop,
     reset,
-  } = useLiveTracking("running", weight);
+  } = useLiveTracking("running", user?.weight ?? 70);
 
   const mutation = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
 
-  const data = useQuery(api.burn.getTodaysActivity);
+  const data = useQuery(api.burn.getTodaysActivity, {});
+  console.log(data);
+
   const dbCalories = data?.totalCalories ?? 0;
-  console.log(dbCalories);
 
   const liveCalories = isTracking ? calories : 0;
 
-  const totalBurned = dbCalories;
+  const totalBurned = dbCalories + (isTracking ? calories : 0);
 
   const handleStop = async () => {
     const result = stop();
@@ -66,7 +68,7 @@ const CaloriesScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 12,
-          paddingTop: 16,
+
           paddingBottom: 100,
           gap: 16,
         }}
@@ -74,7 +76,7 @@ const CaloriesScreen = () => {
         <BurnHero
           liveBurned={liveCalories}
           totalBurned={totalBurned}
-          goal={100}
+          goal={30}
         />
 
         <LiveSessionCard

@@ -36,7 +36,6 @@ export default function Index() {
   meals.map((meal) => (proteinEaten += meal.protein));
   meals.map((meal) => (carbsEaten += meal.carbs));
   meals.map((meal) => (fatEaten += meal.fat));
-  console.log("eaten calories of today", eatenCalories);
 
   //TODO:i have to take total maximum calories and total macros from user or may be i need to calculate it somehow using bmi of the user
   if (!isSignedIn) {
