@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as FileSystem from "expo-file-system/legacy";
+import { systemPrompt } from "./utils";
 
 const genAI = new GoogleGenerativeAI(process.env.EXPO_PUBLIC_GEMINI_API_KEY!);
 
@@ -20,25 +21,7 @@ export const analyzeImageFront = async (imageUri: string) => {
       },
     },
     {
-      text: `
-Analyze this food image.
-
-Return ONLY valid JSON.
-Do NOT include any explanation or markdown.
-if it is not a food return everything as zero
-and in name fill NA
- 
-
-{
-  "name": "",
-  "calories": number,
-  "protein": number,
-  "carbs": number,
-  "fat": number,
-  "sugar": number,
-  "type": "protein | carbs | fat"
-}
-`,
+      text: systemPrompt,
     },
   ]);
 

@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { BurnHero } from "@/components/frontend/burn/Burn-Hero";
@@ -78,6 +78,7 @@ const CaloriesScreen = () => {
 
   return (
     <View className="flex-1 bg-black px-2 pt-10">
+      {/* <Image source={require("../../assets/images/newLazy.png")} /> */}
       <GoalCelebration />
       <ScrollView
         showsVerticalScrollIndicator={false}
