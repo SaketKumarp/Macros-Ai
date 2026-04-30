@@ -1,21 +1,8 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-const BASE_MET = {
-  walking: 3.5,
-  running: 8,
-  cycling: 7,
-  gym: 5.5,
-};
 
-// 🔥 smarter running MET based on speed
-function getRunningMET(speed: number) {
-  if (speed < 1.5) return 4; // very slow jog
-  if (speed < 2.5) return 7; // normal run
-  if (speed < 3.5) return 9; // fast run
-  return 11; // intense run
-}
-
+// add calories and activity in db
 export const addActivity = mutation({
   args: {
     type: v.union(
@@ -27,6 +14,7 @@ export const addActivity = mutation({
     duration: v.number(), // seconds
     distance: v.number(), // meters
     avgSpeed: v.optional(v.number()), // allow frontend to skip
+    calories: v.number(),
   },
 
   handler: async (ctx, args) => {
@@ -53,20 +41,10 @@ export const addActivity = mutation({
 
     if (!myUser) throw new Error("User not found");
 
-    // Calculate avgSpeed safely
     const avgSpeed =
       args.avgSpeed ?? (args.duration > 0 ? args.distance / args.duration : 0);
 
-    const hours = args.duration / 3600;
-
-    // Pick MET (smart)
-    let met = BASE_MET[args.type];
-
-    if (args.type === "running") {
-      met = getRunningMET(avgSpeed);
-    }
-
-    const calories = met * myUser.weight * hours;
+    console.log("front-end calories : ", args.calories);
 
     await ctx.db.insert("activities", {
       userId: user.subject,
@@ -74,17 +52,18 @@ export const addActivity = mutation({
       duration: args.duration,
       distance: args.distance,
       avgSpeed,
-      calories,
+      calories: args.calories,
       source: "gps",
       createdAt: Date.now(),
     });
 
     return {
-      calories,
       avgSpeed,
     };
   },
 });
+
+// get 
 
 export const getTodaysActivity = query({
   handler: async (ctx) => {

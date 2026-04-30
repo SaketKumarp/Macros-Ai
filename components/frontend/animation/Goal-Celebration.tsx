@@ -1,37 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, StyleSheet, Animated } from "react-native";
 import LottieView from "lottie-react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+
+// ✅ preload animation (better performance)
+const successAnim = require("../../../assets/animation/Success celebration.json");
 
 export const GoalCelebration = () => {
   const isGoalReached = useSelector(
     (state: RootState) => state.calories.isGoalReached,
   );
-  console.log(isGoalReached);
 
   const [show, setShow] = useState(false);
+  const prev = useRef(false);
+
+  // ✅ smooth opacity animation
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (isGoalReached) {
+    // trigger only once when goal becomes true
+    if (!prev.current && isGoalReached) {
       setShow(true);
 
-      // auto hide after animation
-      setTimeout(() => setShow(false), 3000);
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
     }
-  }, [isGoalReached]);
+
+    prev.current = isGoalReached;
+  }, [isGoalReached, opacity]);
+
+  const handleFinish = () => {
+    // fade out smoothly
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start(() => {
+      setShow(false);
+    });
+  };
 
   if (!show) return null;
 
   return (
-    <View style={styles.overlay}>
+    <Animated.View style={[styles.overlay, { opacity }]}>
       <LottieView
-        source={require("../../../assets/animation/Success celebration.json")} // 🔥 download from lottiefiles
+        source={successAnim}
         autoPlay
         loop={false}
+        onAnimationFinish={handleFinish}
         style={{ width: "100%", height: "100%" }}
       />
-    </View>
+    </Animated.View>
   );
 };
 
@@ -43,7 +67,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 999,
-    elevation: 999, // 🔥 Android fix
-    pointerEvents: "none", // allows touch through
+    elevation: 999, // Android support
+    pointerEvents: "none", // allow touches through
   },
 });

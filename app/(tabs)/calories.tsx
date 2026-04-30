@@ -1,4 +1,4 @@
-import { Image, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { BurnHero } from "@/components/frontend/burn/Burn-Hero";
@@ -33,7 +33,7 @@ const CaloriesScreen = () => {
     reset,
   } = useLiveTracking("running", user?.weight ?? 70);
 
-  const mutation = useMutation(api.burn.addActivity);
+  const addCalDB = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
 
   const { showToast } = useToast();
@@ -62,15 +62,19 @@ const CaloriesScreen = () => {
     try {
       setLoading(true);
 
-      await mutation({
+      await addCalDB({
         type: "running",
         duration: result.duration,
         distance: result.distance,
         avgSpeed: result.avgSpeed,
+        calories: result.calories,
+
+        // so the calories that are live is a bit different from what i am saving in db
       });
+      showToast("activity added", "success");
       reset();
-    } catch (err) {
-      console.log("Save failed", err);
+    } catch (err: any) {
+      console.log(err.message);
     } finally {
       setLoading(false);
     }

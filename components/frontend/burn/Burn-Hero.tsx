@@ -1,5 +1,8 @@
 import { View, Text } from "react-native";
 import { FlameProgress } from "./Flame_progress";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { cn } from "@/lib/utils";
 
 interface Props {
   liveBurned: number;
@@ -9,6 +12,9 @@ interface Props {
 }
 
 export const BurnHero = ({ liveBurned, totalBurned, goal }: Props) => {
+  const isGoalReached = useSelector(
+    (state: RootState) => state.calories.isGoalReached,
+  );
   const progress = Math.min((totalBurned + liveBurned) / goal, 1);
 
   return (
@@ -18,7 +24,12 @@ export const BurnHero = ({ liveBurned, totalBurned, goal }: Props) => {
         {/* LEFT */}
         <View className="flex-1 items-center">
           <Text className="text-zinc-400 text-sm">Burned</Text>
-          <Text className="text-3xl font-bold text-orange-500">
+          <Text
+            className={cn(
+              "text-3xl font-bold",
+              isGoalReached ? "text-[#00d2d3]" : " text-orange-500",
+            )}
+          >
             {Math.round(totalBurned)}
           </Text>
           <Text className="text-zinc-500 text-xs">kcal</Text>
