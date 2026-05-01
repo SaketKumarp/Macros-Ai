@@ -37,7 +37,9 @@ const CaloriesScreen = () => {
   const { showToast } = useToast();
 
   const data = useQuery(api.burn.getToadysCalories, {});
+  console.log(data);
   const activityData = useQuery(api.burn.getTodaysActivity);
+  console.log(activityData);
 
   const isActivityLoading = activityData === undefined;
 
@@ -67,6 +69,8 @@ const CaloriesScreen = () => {
       burned: Math.round(value.calories).toString(),
     }),
   );
+  // console.log(formattedActivities);
+  // formattedActivities.map((acc) => console.log(acc.duration));
 
   // 🔥 PIE CHART DATA
   const pieData = Object.entries(grouped || {}).map(([type, value]) => ({
@@ -155,7 +159,11 @@ const CaloriesScreen = () => {
 
         {/* 🔥 TODAY ACTIVITY */}
         <TodayActivityCard
-          data={isActivityLoading ? [] : formattedActivities}
+          data={formattedActivities}
+          onMenuPress={(type) => {
+            console.log("Clicked:", type);
+            // 👉 navigate or open modal here
+          }}
         />
 
         {/* 🔥 PIE CHART */}

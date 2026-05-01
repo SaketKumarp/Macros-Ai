@@ -112,14 +112,15 @@ export const getTodaysActivity = query({
   handler: async (ctx) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) return [];
-    const startofDay = new Date();
-    startofDay.setHours(0, 0, 0, 0);
-    const start = startofDay.getTime();
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const start = startOfDay.getTime();
 
     const activities = await ctx.db
       .query("activities")
       .withIndex("by_user_time", (q) =>
-        q.eq("userId", user.subject).eq("createdAt", start),
+        q.eq("userId", user.subject).gte("createdAt", start),
       )
       .collect();
 
