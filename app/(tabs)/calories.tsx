@@ -18,8 +18,7 @@ import { GoalCelebration } from "@/components/frontend/animation/Goal-Celebratio
 
 const CaloriesScreen = () => {
   const user = useQuery(api.test.getUser);
-  if (!user) console.log("user is undefined");
-  const goal = 35;
+  const goal = 10;
 
   const {
     calories,
@@ -35,19 +34,59 @@ const CaloriesScreen = () => {
 
   const addCalDB = useMutation(api.burn.addActivity);
   const [loading, setLoading] = useState(false);
-
   const { showToast } = useToast();
 
-  //TODO: change the ui on completing the goal
+  const data = useQuery(api.burn.getToadysCalories, {});
+  const activityData = useQuery(api.burn.getTodaysActivity);
 
-  const data = useQuery(api.burn.getTodaysActivity, {});
+  const isActivityLoading = activityData === undefined;
+
+  // 🔥 GROUP + AGGREGATE
+  const grouped = activityData?.reduce(
+    (acc, item) => {
+      if (!acc[item.type]) {
+        acc[item.type] = {
+          duration: 0,
+          calories: 0,
+        };
+      }
+
+      acc[item.type].duration += item.duration;
+      acc[item.type].calories += item.calories;
+
+      return acc;
+    },
+    {} as Record<string, { duration: number; calories: number }>,
+  );
+
+  // 🔥 FORMAT FOR UI
+  const formattedActivities = Object.entries(grouped || {}).map(
+    ([type, value]) => ({
+      type: type as "walking" | "running" | "cycling" | "gym",
+      duration: `${Math.round(value.duration)} min`,
+      burned: Math.round(value.calories).toString(),
+    }),
+  );
+
+  // 🔥 PIE CHART DATA
+  const pieData = Object.entries(grouped || {}).map(([type, value]) => ({
+    label: type,
+    burned: Math.round(value.calories),
+    color:
+      type === "running"
+        ? "#eb4d4b"
+        : type === "walking"
+          ? "#8e44ad"
+          : type === "cycling"
+            ? "#2ecc71"
+            : "#3498db",
+  }));
 
   const dbCalories = data?.totalCalories ?? 0;
-
   const liveCalories = isTracking ? calories : 0;
-
-  const totalBurned = dbCalories + (isTracking ? calories : 0);
+  const totalBurned = dbCalories + liveCalories;
   const isGoalReached = totalBurned >= goal;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -56,7 +95,6 @@ const CaloriesScreen = () => {
 
   const handleStop = async () => {
     const result = stop();
-
     if (!result) return;
 
     try {
@@ -68,9 +106,8 @@ const CaloriesScreen = () => {
         distance: result.distance,
         avgSpeed: result.avgSpeed,
         calories: result.calories,
-
-        // so the calories that are live is a bit different from what i am saving in db
       });
+
       showToast("activity added", "success");
       reset();
     } catch (err: any) {
@@ -82,13 +119,12 @@ const CaloriesScreen = () => {
 
   return (
     <View className="flex-1 bg-black px-2 pt-10">
-      {/* <Image source={require("../../assets/images/newLazy.png")} /> */}
       <GoalCelebration />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 12,
-
           paddingBottom: 100,
           gap: 16,
         }}
@@ -116,16 +152,14 @@ const CaloriesScreen = () => {
         />
 
         <QuickActionCard />
-        <TodayActivityCard />
 
-        <CaloriesPieChart
-          data={[
-            { label: "Running", burned: 240, color: "#eb4d4b" },
-            { label: "Walking", burned: 80, color: "#8e44ad" },
-            { label: "Cycling", burned: 120, color: "#2ecc71" },
-            { label: "Gym", burned: 50, color: "#3498db" },
-          ]}
+        {/* 🔥 TODAY ACTIVITY */}
+        <TodayActivityCard
+          data={isActivityLoading ? [] : formattedActivities}
         />
+
+        {/* 🔥 PIE CHART */}
+        <CaloriesPieChart data={pieData} />
       </ScrollView>
     </View>
   );

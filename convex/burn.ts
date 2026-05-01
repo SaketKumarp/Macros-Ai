@@ -1,7 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-
 // add calories and activity in db
 export const addActivity = mutation({
   args: {
@@ -63,9 +62,9 @@ export const addActivity = mutation({
   },
 });
 
-// get 
+// get
 
-export const getTodaysActivity = query({
+export const getToadysCalories = query({
   handler: async (ctx) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) {
@@ -106,5 +105,24 @@ export const getTodaysActivity = query({
       totalDuration,
       avgSpeed,
     };
+  },
+});
+
+export const getTodaysActivity = query({
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) return [];
+    const startofDay = new Date();
+    startofDay.setHours(0, 0, 0, 0);
+    const start = startofDay.getTime();
+
+    const activities = await ctx.db
+      .query("activities")
+      .withIndex("by_user_time", (q) =>
+        q.eq("userId", user.subject).eq("createdAt", start),
+      )
+      .collect();
+
+    return activities;
   },
 });

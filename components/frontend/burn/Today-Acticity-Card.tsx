@@ -9,64 +9,65 @@ import {
 } from "lucide-react-native";
 import { View } from "react-native";
 
-const activities = [
-  {
+interface TodayActivityCardProps {
+  data: {
+    type: "walking" | "running" | "cycling" | "gym";
+    duration: string;
+    burned: string;
+  }[];
+}
+
+const ActivityConfigue = {
+  running: {
     icon: Flame,
     label: "Running",
-    duration: "30 min",
-    burned: "240",
     color: "#eb4d4b",
   },
-  {
+  walking: {
     icon: FootprintsIcon,
     label: "Walking",
-    duration: "20 min",
-    burned: "80",
     color: "#8e44ad",
   },
-  {
+  cycling: {
     icon: Bike,
     label: "Cycling",
-    duration: "25 min",
-    burned: "120",
     color: "#2ecc71",
   },
-  {
+  gym: {
     icon: DumbbellIcon,
     label: "Gym",
-    duration: "45 min",
-    burned: "500",
     color: "#3498db",
   },
-];
+};
 
-export const TodayActivityCard = () => {
+export const TodayActivityCard = ({ data }: TodayActivityCardProps) => {
   return (
     <Card className="bg-[#111] px-4 py-4 rounded-2xl">
       <Text className="text-white font-semibold mb-4">Today Activity</Text>
 
       <View className="gap-y-4">
-        {activities.map((item, index) => {
-          const Icon = item.icon;
+        {data.map((item) => {
+          const configue = ActivityConfigue[item.activity];
+          const Icon = configue.icon;
 
           return (
             <View
-              key={item.label}
+              key={configue.label}
               className="flex-row items-center justify-between"
             >
               {/* LEFT: icon + label + duration */}
               <View className="flex-row items-center gap-3">
                 {/* icon box (FIXED using style, not className) */}
                 <View
-                  style={{ backgroundColor: item.color + "20" }} // light tint
+                  style={{ backgroundColor: configue.color + "20" }} // light tint
                   className="p-2 rounded-full"
                 >
-                  <Icon size={18} color={item.color} />
+                  <Icon size={18} color={configue.color} />
                 </View>
 
                 <View>
                   <Text className="text-white text-sm font-medium">
-                    {item.label}
+                    {configue.label}
                   </Text>
                   <Text className="text-[#888] text-xs">{item.duration}</Text>
                 </View>
