@@ -9,12 +9,13 @@ import { Href, useRouter } from "expo-router";
 import { useSignUp } from "@clerk/expo";
 
 import { AuthCard } from "@/components/auth/Auth-card";
-import { AuthInput } from "@/components/auth/Auth-Input";
+
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Authinput } from "@/components/auth/Auth-newInput";
 
 const VerifyEmail = () => {
   const { signUp, fetchStatus } = useSignUp();
@@ -71,7 +72,7 @@ const VerifyEmail = () => {
           title="Verify your email 📩"
           description="Enter the OTP sent to your email"
         >
-          <AuthInput
+          <Authinput
             label="OTP Code"
             value={code}
             onChangeText={setCode}

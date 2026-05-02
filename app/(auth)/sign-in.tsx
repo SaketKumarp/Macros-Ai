@@ -13,10 +13,8 @@ import * as AuthSession from "expo-auth-session";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
-import { Authcard } from "@/components/auth/Auth-Card2";
+import { Authcard } from "@/components/auth/Auth-newCard";
 
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { Authinput } from "@/components/auth/Auth-newInput";
 
 // Must be at the top — closes the browser tab after redirect

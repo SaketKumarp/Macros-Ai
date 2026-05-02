@@ -17,17 +17,17 @@ interface AuthCardProps {
   onFacebookPress?: () => void;
   socialLoading?: "google" | "facebook" | null;
 }
-
 const GoogleIcon = () => (
   <Image
-    source={require("../assets/images/google.png")}
+    source={require("../../assets/images/google.png")}
     style={{ width: 18, height: 18 }}
     resizeMode="contain"
   />
 );
+
 const FacebookIcon = () => (
   <Image
-    source={require("../assets/images/facebook.png")}
+    source={require("../../assets/images/facebook.png")}
     style={{ width: 25, height: 25 }}
     resizeMode="contain"
   />
@@ -67,19 +67,10 @@ export const Authcard = ({
         <View className="items-center mb-8">
           <View
             className="w-16 h-16 rounded-2xl items-center justify-center mb-4"
-            style={{
-              backgroundColor: "rgba(29, 158, 117, 0.85)",
-              borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.2)",
-              shadowColor: "#1D9E75",
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.5,
-              shadowRadius: 20,
-              elevation: 12,
-            }}
+            style={{}}
           >
             <Image
-              source={require("../assets/images/macro.png")}
+              source={require("../../assets/images/yoga-pose.png")}
               className="w-20 h-20"
               resizeMode="contain"
             />
