@@ -5,27 +5,83 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { useSignUp } from "@clerk/expo";
+import { Href, useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
 
-import { AuthCard } from "@/components/auth/Auth-card";
-import { AuthInput } from "@/components/auth/Auth-input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
- 
+import { Authcard } from "@/components/auth/Auth-Card2";
+
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useOAuth, useSignUp } from "@clerk/expo";
+import { Authinput } from "@/components/auth/Auth-newInput";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignUp = () => {
+  const addUser = useMutation(api.test.addUser);
   const { signUp, errors, fetchStatus } = useSignUp();
   const router = useRouter();
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setName] = useState("");
+  const [socialLoading, setSocialLoading] = useState<
+    "google" | "facebook" | null
+  >(null);
 
-  const loading = fetchStatus === "fetching";
   const { showToast } = useToast();
 
+  const { startOAuthFlow: startGoogleFlow } = useOAuth({
+    strategy: "oauth_google",
+  });
+  const { startOAuthFlow: startFacebookFlow } = useOAuth({
+    strategy: "oauth_facebook",
+  });
+
+  const loading = fetchStatus === "fetching";
+
+  // 🔥 OAuth handler (same as sign-in)
+  const handleOAuth = async (provider: "google" | "facebook") => {
+    try {
+      setSocialLoading(provider);
+
+      const startFlow =
+        provider === "google" ? startGoogleFlow : startFacebookFlow;
+
+      const redirectUrl = AuthSession.makeRedirectUri({
+        scheme: "macrotrack",
+        path: "/(auth)/sign-up",
+      });
+
+      const result = await startFlow({ redirectUrl });
+
+      if (!result) return;
+
+      const { createdSessionId, setActive } = result;
+
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+        addUser({
+          weight: 80,
+          age: 24,
+        });
+
+        showToast("Account created ⚡️", "success");
+        router.replace("/" as Href);
+      } else {
+        showToast("Please complete sign up", "info");
+      }
+    } catch (err: any) {
+      console.error("OAuth error:", err);
+      showToast(err?.message ?? `${provider} sign-up failed`, "error");
+    } finally {
+      setSocialLoading(null);
+    }
+  };
 
   const onSignUp = async () => {
     try {
@@ -34,16 +90,14 @@ const SignUp = () => {
         emailAddress,
         password,
       });
+
       if (error) {
-        showToast("error :", "info", error);
-        console.error(JSON.stringify(error, null, 2));
+        showToast("Error", "info", error);
         return;
       }
 
-      if (!error) {
-        await signUp.verifications.sendEmailCode();
-      }
-      showToast("code has been sent", "info");
+      await signUp.verifications.sendEmailCode();
+      showToast("Code has been sent", "info");
       router.push("/verify-email");
     } catch (err) {
       console.log(err);
@@ -53,17 +107,23 @@ const SignUp = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1">
-        <AuthCard
+        <Authcard
           title="Create Account 🚀"
-          description="Sign up to get started"
+          description="Start your fitness journey"
+          onGooglePress={() => handleOAuth("google")}
+          onFacebookPress={() => handleOAuth("facebook")}
+          socialLoading={socialLoading}
         >
-          <AuthInput
+          {/* Name */}
+          <Authinput
             label="Name"
             value={firstName}
             onChangeText={setName}
-            placeholder=""
+            placeholder="Your name"
           />
-          <AuthInput
+
+          {/* Email */}
+          <Authinput
             label="Email"
             value={emailAddress}
             onChangeText={setEmailAddress}
@@ -71,12 +131,13 @@ const SignUp = () => {
           />
 
           {errors?.fields?.emailAddress && (
-            <Text className="text-red-500 text-sm">
+            <Text style={{ color: "#f87171", fontSize: 12 }}>
               {errors.fields.emailAddress.message}
             </Text>
           )}
 
-          <AuthInput
+          {/* Password */}
+          <Authinput
             label="Password"
             value={password}
             onChangeText={setPassword}
@@ -84,35 +145,51 @@ const SignUp = () => {
           />
 
           {errors?.fields?.password && (
-            <Text className="text-red-500 text-sm">
+            <Text style={{ color: "#f87171", fontSize: 12 }}>
               {errors.fields.password.message}
             </Text>
           )}
 
+          {/* CTA */}
           <Button
             onPress={onSignUp}
             disabled={!emailAddress || !password || loading}
-            className="mt-3 bg-teal-500 rounded-xl py-3 active:opacity-80"
+            className="mt-3 rounded-2xl py-4 items-center justify-center active:opacity-80"
+            style={{
+              backgroundColor: "#1abc9c",
+              shadowColor: "#1abc9c",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.5,
+              shadowRadius: 16,
+              elevation: 10,
+            }}
           >
             {loading ? (
-              <ActivityIndicator />
+              <ActivityIndicator color="#000" />
             ) : (
-              <Text className="text-white text-center font-semibold">
+              <Text className="text-black font-semibold text-base">
                 Create Account
               </Text>
             )}
           </Button>
 
-          <View className="flex-row justify-center mt-3">
-            <Text className="text-neutral-400">Already have an account? </Text>
+          {/* Switch */}
+          <View className="flex-row justify-center mt-2">
+            <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 13 }}>
+              Already have an account?{" "}
+            </Text>
             <Text
-              className="text-teal-400 font-semibold"
+              style={{
+                color: "#5DCAA5",
+                fontSize: 13,
+                fontWeight: "600",
+              }}
               onPress={() => router.push("/sign-in")}
             >
               Login
             </Text>
           </View>
-        </AuthCard>
+        </Authcard>
       </View>
     </TouchableWithoutFeedback>
   );

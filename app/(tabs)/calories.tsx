@@ -65,7 +65,7 @@ const CaloriesScreen = () => {
   const formattedActivities = Object.entries(grouped || {}).map(
     ([type, value]) => ({
       type: type as "walking" | "running" | "cycling" | "gym",
-      duration: `${Math.round(value.duration)} min`,
+      duration: `${Math.round(value.duration / 60)} min`,
       burned: Math.round(value.calories).toString(),
     }),
   );
@@ -105,7 +105,7 @@ const CaloriesScreen = () => {
       setLoading(true);
 
       await addCalDB({
-        type: "running",
+        type: "gym",
         duration: result.duration,
         distance: result.distance,
         avgSpeed: result.avgSpeed,

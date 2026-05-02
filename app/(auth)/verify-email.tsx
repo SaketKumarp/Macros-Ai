@@ -9,7 +9,7 @@ import { Href, useRouter } from "expo-router";
 import { useSignUp } from "@clerk/expo";
 
 import { AuthCard } from "@/components/auth/Auth-card";
-import { AuthInput } from "@/components/auth/Auth-input";
+import { AuthInput } from "@/components/auth/Auth-Input";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
@@ -48,7 +48,7 @@ const VerifyEmail = () => {
             }
           },
         });
-        
+
         addUser({
           weight: 80,
           age: 24,
