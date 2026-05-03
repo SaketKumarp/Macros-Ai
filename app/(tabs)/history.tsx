@@ -5,12 +5,14 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import HistoryMealCard from "@/components/frontend/macros/History-Card";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const History = () => {
   const mealsData = useQuery(api.macros.getFood);
   const [search, setSearch] = React.useState("");
+  const router = useRouter();
 
-  // 🔍 Filter meals
+  //  Filter meals
   const filteredMeals = React.useMemo(() => {
     if (!mealsData) return [];
 
@@ -19,7 +21,7 @@ const History = () => {
     );
   }, [mealsData, search]);
 
-  // 📅 Group meals by date
+  // Group meals by date
   const groupedMeals = React.useMemo(() => {
     if (!filteredMeals) return {};
 
@@ -32,7 +34,9 @@ const History = () => {
       return acc;
     }, {});
   }, [filteredMeals]);
-
+  const handleDetails = () => {
+    router.replace("/screens/detail");
+  };
   // 🔽 Sort dates (latest first)
   const sortedDates = React.useMemo(() => {
     return Object.keys(groupedMeals).sort(
@@ -40,7 +44,7 @@ const History = () => {
     );
   }, [groupedMeals]);
 
-  // ⏳ Loading
+  //  Loading
   if (!mealsData) {
     return (
       <SafeAreaView className="flex-1 bg-[#0f0f10] justify-center items-center">
@@ -87,7 +91,11 @@ const History = () => {
 
             {/* Meals */}
             {groupedMeals[date].map((meal: any) => (
-              <HistoryMealCard key={meal._id} meal={meal} />
+              <HistoryMealCard
+                key={meal._id}
+                meal={meal}
+                openDetails={handleDetails}
+              />
             ))}
           </View>
         ))}

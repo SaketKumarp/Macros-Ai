@@ -1,7 +1,13 @@
 import { View, Text, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Button } from "@/components/ui/button";
 
-const HistoryMealCard = ({ meal }: any) => {
+interface HistoryMealCardProps {
+  meal: any;
+  openDetails?: () => void;
+}
+
+const HistoryMealCard = ({ meal, openDetails }: HistoryMealCardProps) => {
   return (
     <View className="bg-[#1c1c1e] p-3 rounded-2xl mb-3 border border-[#2c2c2e] flex-row">
       {/* 🖼️ Meal Image */}
@@ -24,7 +30,12 @@ const HistoryMealCard = ({ meal }: any) => {
             {meal.name || "Unnamed Meal"}
           </Text>
 
-          <Ionicons name="chevron-forward" size={18} color="#666" />
+          <Ionicons
+            name="chevron-forward"
+            size={18}
+            color="#666"
+            onPress={openDetails}
+          />
         </View>
 
         {/* Calories */}

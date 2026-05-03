@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 
-interface MealAIResponse {
+interface Meal {
   name: string;
   calories: number;
   protein: number;
@@ -11,7 +11,7 @@ interface MealAIResponse {
 }
 
 interface Props {
-  data: MealAIResponse;
+  data: Meal;
   onAdd?: () => void;
 }
 
@@ -22,7 +22,7 @@ const MacroItem = ({ label, value }: { label: string; value: number }) => (
   </View>
 );
 
-const MealCard = ({ data, onAdd }: Props) => {
+export const MealHidstoryCard = ({ data, onAdd }: Props) => {
   return (
     <View className="flex-1 mt-6 bg-[#0d0d0d] rounded-3xl border border-[#1c1c1e] p-6 justify-between">
       {/* 🔝 HEADER */}
@@ -66,5 +66,3 @@ const MealCard = ({ data, onAdd }: Props) => {
     </View>
   );
 };
-
-export default MealCard;
