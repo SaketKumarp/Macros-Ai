@@ -16,7 +16,7 @@ export const addMeal = mutation({
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized");
-    const today = new Date().toISOString().split("T")[0]; // ✅ HERE
+    const today = new Date().toISOString().split("T")[0];
 
     const mealId = await ctx.db.insert("foods", {
       userId: user.subject,
@@ -120,50 +120,6 @@ export const getFood = query({
   },
 });
 
-// export const getDateRangeSummary = query({
-//   args: {
-//     startDate: v.string(),
-//     endDate: v.string(),
-//   },
-//   handler: async (ctx, args) => {
-//     const user = await ctx.auth.getUserIdentity();
-//     if (!user) return [];
-
-//     const meals = await ctx.db
-//       .query("foods")
-//       .withIndex("by_user", (q) => q.eq("userId", user.subject))
-//       .collect();
-
-//     // filter range
-//     const filtered = meals.filter(
-//       (m) => m.date >= args.startDate && m.date <= args.endDate,
-//     );
-
-//     const grouped: Record<string, any> = {};
-
-//     for (const meal of filtered) {
-//       if (!grouped[meal.date]) {
-//         grouped[meal.date] = {
-//           date: meal.date,
-//           calories: 0,
-//           protein: 0,
-//           carbs: 0,
-//           fat: 0,
-//           count: 0,
-//         };
-//       }
-
-//       grouped[meal.date].calories += meal.calories;
-//       grouped[meal.date].protein += meal.protein;
-//       grouped[meal.date].carbs += meal.carbs;
-//       grouped[meal.date].fat += meal.fat;
-//       grouped[meal.date].count += 1;
-//     }
-
-//     return Object.values(grouped);
-//   },
-// });
-
 export const getRecentMeals = query({
   args: {},
 
@@ -177,3 +133,5 @@ export const getRecentMeals = query({
       .take(10); // latest 10
   },
 });
+
+//TODO: get meals by id

@@ -18,8 +18,8 @@ export default defineSchema({
     createdAt: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_user_date", ["userId", "date"]), // 🔥 CRITICAL
-
+    .index("by_user_date", ["userId", "date"]),
+ 
   goals: defineTable({
     userId: v.string(),
     calories: v.number(),
@@ -54,7 +54,7 @@ export default defineSchema({
     duration: v.number(), // seconds
     distance: v.number(), // meters
 
-    avgSpeed: v.number(), // m/s  
+    avgSpeed: v.number(), // m/s
 
     calories: v.number(),
 

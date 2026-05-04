@@ -3,29 +3,34 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import HistoryMealCard from "@/components/frontend/macros/History-Card";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
+// ✅ Type aliases
+type Meal = Doc<"foods">;
+type GroupedMeals = Record<string, Meal[]>;
+
 const History = () => {
-  const mealsData = useQuery(api.macros.getFood);
+  const mealsData = useQuery(api.macros.getFood) as Meal[] | undefined;
   const [search, setSearch] = React.useState("");
   const router = useRouter();
 
-  //  Filter meals
-  const filteredMeals = React.useMemo(() => {
+  // 🔍 Filter meals
+  const filteredMeals = React.useMemo<Meal[]>(() => {
     if (!mealsData) return [];
 
-    return mealsData.filter((meal: any) =>
-      meal.name?.toLowerCase().includes(search.toLowerCase()),
+    return mealsData.filter((meal) =>
+      meal.name.toLowerCase().includes(search.toLowerCase()),
     );
   }, [mealsData, search]);
 
-  // Group meals by date
-  const groupedMeals = React.useMemo(() => {
-    if (!filteredMeals) return {};
+  // 📅 Group meals by date
+  const groupedMeals = React.useMemo<GroupedMeals>(() => {
+    if (filteredMeals.length === 0) return {};
 
-    return filteredMeals.reduce((acc: any, meal: any) => {
+    return filteredMeals.reduce((acc: GroupedMeals, meal) => {
       const dateKey = new Date(meal.date).toISOString().split("T")[0];
 
       if (!acc[dateKey]) acc[dateKey] = [];
@@ -34,17 +39,15 @@ const History = () => {
       return acc;
     }, {});
   }, [filteredMeals]);
-  const handleDetails = () => {
-    router.replace("/screens/detail");
-  };
+
   // 🔽 Sort dates (latest first)
-  const sortedDates = React.useMemo(() => {
+  const sortedDates = React.useMemo<string[]>(() => {
     return Object.keys(groupedMeals).sort(
       (a, b) => new Date(b).getTime() - new Date(a).getTime(),
     );
   }, [groupedMeals]);
 
-  //  Loading
+  // ⏳ Loading
   if (!mealsData) {
     return (
       <SafeAreaView className="flex-1 bg-[#0f0f10] justify-center items-center">
@@ -90,11 +93,16 @@ const History = () => {
             </View>
 
             {/* Meals */}
-            {groupedMeals[date].map((meal: any) => (
+            {groupedMeals[date].map((meal) => (
               <HistoryMealCard
                 key={meal._id}
                 meal={meal}
-                openDetails={handleDetails}
+                openDetails={() =>
+                  router.push({
+                    pathname: "/screens/detail",
+                    params: { mealId: meal._id },
+                  })
+                }
               />
             ))}
           </View>
@@ -109,7 +117,7 @@ export default History;
 //////////////////////////////////////////////////////
 
 // 📅 Date Formatter
-const formatDate = (dateStr: string) => {
+const formatDate = (dateStr: string): string => {
   const today = new Date();
   const todayKey = today.toISOString().split("T")[0];
 
