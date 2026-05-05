@@ -135,3 +135,16 @@ export const getRecentMeals = query({
 });
 
 //TODO: get meals by id
+
+export const getmeal = query({
+  args: {
+    mealId: v.id("foods"),
+  },
+  handler: async (ctx, { mealId }) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) throw new Error("unauthorized");
+    const meal = await ctx.db.get(mealId);
+
+    return meal;
+  },
+});

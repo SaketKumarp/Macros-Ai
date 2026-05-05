@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Doc } from "@/convex/_generated/dataModel";
 
+type Meal = Doc<"foods">;
 interface MealHistoryCardProps {
-  data: any;
-  onAdd: () => void;
+  meal: Meal;
 }
 
 const MacroItem = ({ label, value, icon }: any) => (
@@ -14,16 +15,16 @@ const MacroItem = ({ label, value, icon }: any) => (
   </View>
 );
 
-export const MealHistoryCard = ({ data, onAdd }: MealHistoryCardProps) => {
+export const MealHistoryCard = ({ meal }: MealHistoryCardProps) => {
   return (
     <View className="flex-1 mt-6 bg-[#0d0d0d] rounded-3xl border border-[#1c1c1e] p-6">
       {/* HEADER */}
       <View className="flex-row justify-between items-center">
-        <Text className="text-white text-2xl font-bold">🍽️ {data.name}</Text>
+        <Text className="text-white text-2xl font-bold">🍽️ {meal.name}</Text>
 
         <View className="bg-[#1c1c1e] px-3 py-1 rounded-full">
           <Text className="text-gray-400 text-xs uppercase">
-            {data.type || "Meal"}
+            {meal.type || "Meal"}
           </Text>
         </View>
       </View>
@@ -31,7 +32,7 @@ export const MealHistoryCard = ({ data, onAdd }: MealHistoryCardProps) => {
       {/* CALORIES */}
       <View className="mt-6 items-center">
         <Text className="text-[#00d2d3] text-5xl font-extrabold">
-          {data.calories}
+          {meal.calories}
         </Text>
         <Text className="text-gray-400 text-sm mt-1">kcal consumed</Text>
       </View>
@@ -43,24 +44,14 @@ export const MealHistoryCard = ({ data, onAdd }: MealHistoryCardProps) => {
       <Text className="text-gray-400 text-sm mb-3">Macronutrients</Text>
 
       <View className="flex-row gap-3">
-        <MacroItem label="Protein" value={data.protein} icon="barbell" />
-        <MacroItem label="Carbs" value={data.carbs} icon="leaf" />
+        <MacroItem label="Protein" value={meal.protein} icon="barbell" />
+        <MacroItem label="Carbs" value={meal.carbs} icon="leaf" />
       </View>
 
       <View className="flex-row gap-3 mt-3">
-        <MacroItem label="Fat" value={data.fat} icon="water" />
-        <MacroItem label="Sugar" value={data.sugar} icon="nutrition" />
+        <MacroItem label="Fat" value={meal.fat} icon="water" />
+        <MacroItem label="Sugar" value={meal.sugar} icon="nutrition" />
       </View>
-
-      {/* BUTTON */}
-      {onAdd && (
-        <TouchableOpacity
-          onPress={onAdd}
-          className="mt-8 bg-[#00d2d3] py-4 rounded-2xl items-center"
-        >
-          <Text className="text-black font-bold">Add Again 🔁</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 };
