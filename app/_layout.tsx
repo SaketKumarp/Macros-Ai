@@ -7,6 +7,7 @@ import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ToastProvider } from "@/providers/toast";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!);
 
@@ -30,7 +31,9 @@ export default function RootLayout() {
       <ConvexClientProvider>
         <Provider store={store}>
           <ToastProvider>
-            <Stack screenOptions={{ headerShown: false }} />
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Stack screenOptions={{ headerShown: false }} />
+            </GestureHandlerRootView>
           </ToastProvider>
         </Provider>
       </ConvexClientProvider>
