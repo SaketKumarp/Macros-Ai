@@ -21,6 +21,9 @@ hehe
 <img width="220"   alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-04-28 at 00 50 25" src="https://github.com/user-attachments/assets/3ebbd6d5-ebf1-48ea-9c0b-d66342c803de" />
 <img width="220"  alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-04-28 at 00 49 39" src="https://github.com/user-attachments/assets/d4acedd5-6897-4b71-ae57-5ea469c6c0da" />
  <img width="220"  alt="PHOTO-2026-04-27-12-32-59" src="https://github.com/user-attachments/assets/a476c7f9-3434-4052-9b89-15fad0757ca6" />
+ <img width="220"   alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-05-07 at 23 24 29" src="https://github.com/user-attachments/assets/b2b16754-5355-4b5f-a632-d8fc1455504e" />
+<img width="220"  alt="Simulator Screenshot - iPhone 17 Pro Max - 2026-05-07 at 23 24 50" src="https://github.com/user-attachments/assets/27f18525-726f-41d5-8e6a-6872b53ecf3b" />
+
 </p>
 
 
