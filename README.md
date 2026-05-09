@@ -1,6 +1,7 @@
 # 🧠🍽️ AI Macro Tracker
 
 An intelligent mobile app that analyzes food images and instantly estimates **calories, protein, carbs, fats, and food type** using AI.
+Also Track your activities and burning calories 
 
 Built with **Expo (React Native)** for a fast, cross-platform experience.
 ---
