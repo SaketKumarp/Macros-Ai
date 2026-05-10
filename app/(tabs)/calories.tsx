@@ -103,7 +103,7 @@ const CaloriesScreen = () => {
       setLoading(true);
 
       await addCalDB({
-        type: "gym",
+        type: "running",
         duration: result.duration,
         distance: result.distance,
         avgSpeed: result.avgSpeed,
