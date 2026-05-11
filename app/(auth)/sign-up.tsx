@@ -14,15 +14,18 @@ import { Text } from "@/components/ui/text";
 import { useToast } from "@/providers/toast";
 import { Authcard } from "@/components/auth/Auth-newCard";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useOAuth, useSignUp } from "@clerk/expo";
 import { Authinput } from "@/components/auth/Auth-newInput";
+import { checkNewUser } from "@/convex/test";
 
 WebBrowser.maybeCompleteAuthSession();
 
 const SignUp = () => {
-  const addUser = useMutation(api.test.addUser);
+  // const addUser = useMutation(api.test.addUser);
+
+  const checkNewUser = useMutation(api.test.checkNewUser);
   const { signUp, errors, fetchStatus } = useSignUp();
   const router = useRouter();
 
@@ -65,13 +68,21 @@ const SignUp = () => {
 
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
-        addUser({
-          weight: 80,
-          age: 24,
-        });
+        const res = await checkNewUser();
+        console.log(res);
+        if (res.isNewUser) {
+          router.push("/screens/onboarding");
+          showToast("Account created ⚡️", "success");
+        } else {
+          router.replace("/" as Href);
+          showToast("Welcome back ⚡️", "success");
+        }
 
-        showToast("Account created ⚡️", "success");
-        router.replace("/" as Href);
+        // if user exists
+        // addUser({
+        //   weight: 80,
+        //   age: 24,
+        // });
       } else {
         showToast("Please complete sign up", "info");
       }

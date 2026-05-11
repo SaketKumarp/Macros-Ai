@@ -96,7 +96,9 @@ const SignIn = () => {
           },
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("login error", error);
+    }
   };
 
   return (

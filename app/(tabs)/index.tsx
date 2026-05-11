@@ -7,9 +7,8 @@ import { MacroRing } from "@/components/frontend/macros/Macro-ring";
 import { NoMeals } from "@/components/frontend/meal/No-Meal";
 
 import { api } from "@/convex/_generated/api";
-import { useToast } from "@/providers/toast";
 
-import { useClerk, useUser } from "@clerk/expo";
+import { useUser } from "@clerk/expo";
 import { useQuery } from "convex/react";
 import { Redirect, useRouter } from "expo-router";
 import { useState } from "react";
@@ -18,7 +17,6 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 export default function Index() {
   const { isSignedIn, user } = useUser();
 
-  const { showToast } = useToast();
   const router = useRouter();
   const [profileOpen, setprofileOpen] = useState(false);
 

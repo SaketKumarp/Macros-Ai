@@ -17,6 +17,7 @@ export const addUser = mutation({
   handler: async (ctx, { age, weight }) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized!");
+
     await ctx.db.insert("users", {
       userId: user.subject,
       name: user.name ?? "NA",
@@ -25,6 +26,26 @@ export const addUser = mutation({
     });
   },
 });
+
+export const checkNewUser = mutation({
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", user.subject))
+      .unique();
+
+    return {
+      isNewUser: !existingUser,
+    };
+  },
+});
+
 export const getUser = query({
   handler: async (ctx) => {
     const user = await ctx.auth.getUserIdentity();
