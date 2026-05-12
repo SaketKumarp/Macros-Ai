@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Button } from "@/components/ui/button";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const goals = ["Lose Weight", "Build Muscle", "Stay Fit", "Improve Strength"];
 
@@ -25,20 +27,20 @@ const Onboarding = () => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [goal, setGoal] = useState("");
+  const addUser = useMutation(api.test.addUser);
 
   const disabled = !age || !weight || !height || !goal;
 
   const handleContinue = async () => {
     // later call convex addUser here
 
-    /*
     await addUser({
       age: Number(age),
       weight: Number(weight),
       height: Number(height),
+      
       goal,
-    })
-    */
+    });
 
     router.replace("/");
   };

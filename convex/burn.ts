@@ -4,6 +4,7 @@ import { v } from "convex/values";
 // add calories and activity in db
 export const addActivity = mutation({
   args: {
+    
     type: v.union(
       v.literal("walking"),
       v.literal("running"),

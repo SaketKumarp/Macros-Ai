@@ -19,7 +19,7 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_user_date", ["userId", "date"]),
- 
+
   goals: defineTable({
     userId: v.string(),
     calories: v.number(),
@@ -39,6 +39,7 @@ export default defineSchema({
     name: v.string(),
     weight: v.number(), // current weight (fast access)
     age: v.number(),
+    height: v.number(),
   }).index("by_userId", ["userId"]),
 
   activities: defineTable({

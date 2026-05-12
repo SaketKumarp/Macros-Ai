@@ -13,8 +13,11 @@ export const addUser = mutation({
   args: {
     age: v.number(),
     weight: v.number(),
+    height: v.number(),
+    goal: v.string(),
+    // add goal as cut or bulk
   },
-  handler: async (ctx, { age, weight }) => {
+  handler: async (ctx, { age, weight, height }) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized!");
 
@@ -23,6 +26,7 @@ export const addUser = mutation({
       name: user.name ?? "NA",
       age,
       weight,
+      height,
     });
   },
 });
