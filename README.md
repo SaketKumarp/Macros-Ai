@@ -35,6 +35,7 @@ hehe
 * Carbs 🌾
 * Fats 💧
 * Food Type 🏷️
+* Burnt 🔥 
 
 ---
 
