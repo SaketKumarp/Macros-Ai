@@ -7,7 +7,9 @@ Built with **Expo (React Native)** for a fast, cross-platform experience.
 ---
 
 ## 🚀 Features
-hehe
+you can also track your calorie burnt
+i will be adding ml for further improbements and prediction modals for giving a score which will help in improvement of over-all health 
+
 ### 📸 Food Recognition + 🔍 Macro Detection + ⚡ Insights
 
 <p align="center">
