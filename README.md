@@ -81,6 +81,7 @@ npm start
 * 📊 Analytics dashboard
 * ☁️ Cloud sync
 * 🎯 Goal-based insights
+* 🔥Burn calories and track your progress 
 
 ---
 
