@@ -102,7 +102,7 @@ export default function Index() {
               Loading meals...
             </Text>
           ) : meals.length === 0 ? (
-            <NoMeals onAddMeal={() => console.log("onadd meal")} />
+            <NoMeals onAddMeal={() => router.push("/screens/onboarding")} />
           ) : (
             meals.map((item) => (
               <EatenCard

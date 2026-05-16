@@ -39,7 +39,8 @@ export default defineSchema({
     name: v.string(),
     weight: v.number(), // current weight (fast access)
     age: v.number(),
-    height: v.number(),
+    height: v.optional(v.number()),
+    goal: v.optional(v.string()),
   }).index("by_userId", ["userId"]),
 
   activities: defineTable({

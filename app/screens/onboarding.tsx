@@ -8,17 +8,16 @@ import {
   View,
   Text,
   TextInput,
+  Pressable,
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
-import { Button } from "@/components/ui/button";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
-const goals = ["Lose Weight", "Build Muscle", "Stay Fit", "Improve Strength"];
+const goals = ["Cut", "Bulk"];
 
 const Onboarding = () => {
   const router = useRouter();
@@ -32,28 +31,36 @@ const Onboarding = () => {
   const disabled = !age || !weight || !height || !goal;
 
   const handleContinue = async () => {
-    // later call convex addUser here
+    try {
+      addUser({
+        age: Number(age),
+        weight: Number(weight),
+        height: Number(height),
+        goal,
+      });
 
-    await addUser({
-      age: Number(age),
-      weight: Number(weight),
-      height: Number(height),
-      
-      goal,
-    });
+      console.log({
+        age: Number(age),
+        weight: Number(weight),
+        height: Number(height),
+        goal,
+      });
 
-    router.replace("/");
+      router.replace("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient
         colors={["#0f172a", "#111827", "#000000"]}
-        className="flex-1"
+        style={{ flex: 1 }}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : undefined}
-          className="flex-1"
+          style={{ flex: 1 }}
         >
           <ScrollView
             contentContainerStyle={{
@@ -64,24 +71,37 @@ const Onboarding = () => {
             showsVerticalScrollIndicator={false}
           >
             {/* Header */}
-            <View className="mb-10">
+            <View style={{ marginBottom: 40 }}>
               <View
-                className="w-20 h-20 rounded-full items-center justify-center mb-6"
                 style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 24,
                   backgroundColor: "rgba(26,188,156,0.15)",
                 }}
               >
                 <Ionicons name="fitness" size={40} color="#1abc9c" />
               </View>
 
-              <Text className="text-white text-4xl font-bold mb-3">
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 36,
+                  fontWeight: "bold",
+                  marginBottom: 12,
+                }}
+              >
                 Welcome 🚀
               </Text>
 
               <Text
-                className="text-base leading-6"
                 style={{
                   color: "rgba(255,255,255,0.6)",
+                  fontSize: 16,
+                  lineHeight: 24,
                 }}
               >
                 Let’s personalize your fitness journey and build your perfect
@@ -91,16 +111,24 @@ const Onboarding = () => {
 
             {/* Card */}
             <View
-              className="rounded-3xl p-6"
               style={{
+                borderRadius: 24,
+                padding: 24,
                 backgroundColor: "rgba(255,255,255,0.05)",
                 borderWidth: 1,
                 borderColor: "rgba(255,255,255,0.08)",
               }}
             >
               {/* Age */}
-              <View className="mb-5">
-                <Text className="text-white mb-2 font-semibold text-sm">
+              <View style={{ marginBottom: 20 }}>
+                <Text
+                  style={{
+                    color: "white",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                    fontSize: 14,
+                  }}
+                >
                   Age
                 </Text>
 
@@ -110,16 +138,27 @@ const Onboarding = () => {
                   keyboardType="numeric"
                   placeholder="Enter your age"
                   placeholderTextColor="rgba(255,255,255,0.3)"
-                  className="rounded-2xl px-4 py-4 text-white text-base"
                   style={{
+                    borderRadius: 16,
+                    paddingHorizontal: 16,
+                    paddingVertical: 16,
+                    color: "white",
+                    fontSize: 16,
                     backgroundColor: "rgba(255,255,255,0.06)",
                   }}
                 />
               </View>
 
               {/* Weight */}
-              <View className="mb-5">
-                <Text className="text-white mb-2 font-semibold text-sm">
+              <View style={{ marginBottom: 20 }}>
+                <Text
+                  style={{
+                    color: "white",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                    fontSize: 14,
+                  }}
+                >
                   Weight (kg)
                 </Text>
 
@@ -129,16 +168,27 @@ const Onboarding = () => {
                   keyboardType="numeric"
                   placeholder="Current body weight"
                   placeholderTextColor="rgba(255,255,255,0.3)"
-                  className="rounded-2xl px-4 py-4 text-white text-base"
                   style={{
+                    borderRadius: 16,
+                    paddingHorizontal: 16,
+                    paddingVertical: 16,
+                    color: "white",
+                    fontSize: 16,
                     backgroundColor: "rgba(255,255,255,0.06)",
                   }}
                 />
               </View>
 
               {/* Height */}
-              <View className="mb-6">
-                <Text className="text-white mb-2 font-semibold text-sm">
+              <View style={{ marginBottom: 24 }}>
+                <Text
+                  style={{
+                    color: "white",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                    fontSize: 14,
+                  }}
+                >
                   Height (cm)
                 </Text>
 
@@ -148,68 +198,98 @@ const Onboarding = () => {
                   keyboardType="numeric"
                   placeholder="Your height"
                   placeholderTextColor="rgba(255,255,255,0.3)"
-                  className="rounded-2xl px-4 py-4 text-white text-base"
                   style={{
+                    borderRadius: 16,
+                    paddingHorizontal: 16,
+                    paddingVertical: 16,
+                    color: "white",
+                    fontSize: 16,
                     backgroundColor: "rgba(255,255,255,0.06)",
                   }}
                 />
               </View>
 
               {/* Goals */}
-              <View className="mb-8">
-                <Text className="text-white mb-4 font-semibold text-sm">
+              <View style={{ marginBottom: 32 }}>
+                <Text
+                  style={{
+                    color: "white",
+                    marginBottom: 16,
+                    fontWeight: "600",
+                    fontSize: 14,
+                  }}
+                >
                   Fitness Goal
                 </Text>
 
-                <View className="flex-row flex-wrap gap-3">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 12,
+                  }}
+                >
                   {goals.map((item) => {
                     const active = goal === item;
 
                     return (
-                      <Text
+                      <Pressable
                         key={item}
                         onPress={() => setGoal(item)}
-                        className="px-4 py-3 rounded-2xl overflow-hidden"
                         style={{
+                          paddingHorizontal: 16,
+                          paddingVertical: 12,
+                          borderRadius: 16,
                           backgroundColor: active
                             ? "#1abc9c"
                             : "rgba(255,255,255,0.06)",
-                          color: active ? "#000" : "#fff",
-                          fontWeight: "600",
                         }}
                       >
-                        {item}
-                      </Text>
+                        <Text
+                          style={{
+                            color: active ? "black" : "white",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item}
+                        </Text>
+                      </Pressable>
                     );
                   })}
                 </View>
               </View>
 
-              {/* CTA */}
-              <Button
+              {/* Button */}
+              <Pressable
                 disabled={disabled}
                 onPress={handleContinue}
-                className="rounded-2xl py-4 items-center justify-center"
                 style={{
                   backgroundColor: disabled
                     ? "rgba(26,188,156,0.4)"
                     : "#1abc9c",
-
-                  shadowColor: "#1abc9c",
-                  shadowOffset: { width: 0, height: 10 },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 20,
-                  elevation: 10,
+                  paddingVertical: 18,
+                  borderRadius: 20,
+                  alignItems: "center",
                 }}
               >
-                <Text className="text-black font-bold text-base">Continue</Text>
-              </Button>
+                <Text
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    fontSize: 16,
+                  }}
+                >
+                  Continue
+                </Text>
+              </Pressable>
             </View>
 
             {/* Footer */}
             <Text
-              className="text-center mt-6 text-sm"
               style={{
+                textAlign: "center",
+                marginTop: 24,
+                fontSize: 14,
                 color: "rgba(255,255,255,0.35)",
               }}
             >
