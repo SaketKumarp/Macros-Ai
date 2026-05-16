@@ -63,3 +63,16 @@ export const getUser = query({
     return data;
   },
 });
+
+export const getuserDetails = query({
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) throw new Error("unauthorized");
+    const details = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", user.subject))
+      .first();
+
+    return details;
+  },
+});
