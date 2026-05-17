@@ -5,10 +5,12 @@ import { api } from "@/convex/_generated/api";
 
 import { Meal } from "@/lib/types";
 import { RecentScanCard } from "./Recent-card";
+import { useRouter } from "expo-router";
 
-const ITEM_WIDTH = 180;
+const ITEM_WIDTH = 200;
 
 export const RecentScans = () => {
+  const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const scans = useQuery(api.macros.getRecentMeals) as Meal[] | undefined;
@@ -19,7 +21,12 @@ export const RecentScans = () => {
     <View className="mt-6">
       <View className="flex-row justify-between items-center mb-3">
         <Text className="text-white text-lg font-semibold">Recent Scans</Text>
-        <Text className="text-[#1dd1a1] text-sm">See all</Text>
+        <Text
+          className="text-[#1dd1a1] text-sm"
+          onPress={() => router.push("/(tabs)/history")}
+        >
+          See all
+        </Text>
       </View>
 
       <Animated.FlatList
