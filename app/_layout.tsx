@@ -8,6 +8,7 @@ import { ToastProvider } from "@/providers/toast";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PortalHost } from "@rn-primitives/portal";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!);
 
@@ -33,6 +34,8 @@ export default function RootLayout() {
           <ToastProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <Stack screenOptions={{ headerShown: false }} />
+
+              <PortalHost />
             </GestureHandlerRootView>
           </ToastProvider>
         </Provider>

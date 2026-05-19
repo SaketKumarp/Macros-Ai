@@ -1,3 +1,4 @@
+import { ProfileDropDown } from "@/components/auth/Profile-dropdown";
 import { ProfileSheet } from "@/components/auth/Profile-Sheet";
 import EatenCard, {
   EatenCardProps,
@@ -27,7 +28,7 @@ export default function Index() {
 
   const router = useRouter();
 
-  const [profileOpen, setprofileOpen] = useState(false);
+  // const [profileOpen, setprofileOpen] = useState(false);
 
   // meals
   const mealData = useQuery(api.macros.getTodayMeals);
@@ -69,7 +70,7 @@ export default function Index() {
   const fatEaten = meals.reduce((acc, meal) => acc + meal.fat, 0);
 
   const handleSignOut = () => {
-    setprofileOpen(true);
+    // setprofileOpen(true);
   };
 
   return (
@@ -82,12 +83,14 @@ export default function Index() {
           <Text className="text-gray-400 mt-1">Track your nutrition</Text>
         </View>
 
-        <TouchableOpacity onPress={handleSignOut}>
-          <Image
-            source={{ uri: user?.imageUrl }}
-            className="w-10 h-10 rounded-full border border-gray-600"
-          />
-        </TouchableOpacity>
+        <ProfileDropDown
+          onProfilePress={() => {
+            router.push("/");
+          }}
+          onSettingsPress={() => {
+            router.push("/");
+          }}
+        />
       </View>
 
       {/* Macro Ring */}
@@ -157,10 +160,10 @@ export default function Index() {
         <Text className="text-black text-2xl font-bold">+</Text>
       </TouchableOpacity>
 
-      <ProfileSheet
+      {/* <ProfileSheet
         visible={profileOpen}
         onClose={() => setprofileOpen(false)}
-      />
+      /> */}
     </View>
   );
 }
