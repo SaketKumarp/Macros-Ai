@@ -96,7 +96,7 @@ export const ProfileDropDown = ({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem onPress={handleLogout}>
-          <Text className="text-red-400">Log out</Text>
+          <Text className="text-red-400 font-bold">Log out</Text>
 
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
