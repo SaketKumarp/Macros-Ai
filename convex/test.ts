@@ -21,6 +21,15 @@ export const addUser = mutation({
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized!");
 
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", user.subject))
+      .unique();
+
+    if (existingUser) {
+      throw new Error("user detail exists");
+    }
+
     await ctx.db.insert("users", {
       userId: user.subject,
       name: user.name ?? "NA",
@@ -29,6 +38,8 @@ export const addUser = mutation({
       height,
       goal,
     });
+
+    return { success: true };
   },
 });
 
@@ -51,23 +62,13 @@ export const checkNewUser = mutation({
   },
 });
 
-export const getUser = query({
-  handler: async (ctx) => {
-    const user = await ctx.auth.getUserIdentity();
-    if (!user) return null;
-    const data = await ctx.db
-      .query("users")
-      .withIndex("by_userId", (q) => q.eq("userId", user.subject))
-      .unique();
-
-    return data;
-  },
-});
-
 export const getuserDetails = query({
   handler: async (ctx) => {
     const user = await ctx.auth.getUserIdentity();
-    if (!user) throw new Error("unauthorized");
+
+    if (!user) {
+      return null;
+    }
     const details = await ctx.db
       .query("users")
       .withIndex("by_userId", (q) => q.eq("userId", user.subject))
@@ -76,3 +77,16 @@ export const getuserDetails = query({
     return details;
   },
 });
+
+// export const getUser = query({
+//   handler: async (ctx) => {
+//     const user = await ctx.auth.getUserIdentity();
+//     if (!user) return null;
+//     const data = await ctx.db
+//       .query("users")
+//       .withIndex("by_userId", (q) => q.eq("userId", user.subject))
+//       .unique();
+
+//     return data;
+//   },
+// });

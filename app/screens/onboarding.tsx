@@ -39,13 +39,6 @@ const Onboarding = () => {
         goal,
       });
 
-      console.log({
-        age: Number(age),
-        weight: Number(weight),
-        height: Number(height),
-        goal,
-      });
-
       router.replace("/");
     } catch (error) {
       console.log(error);
