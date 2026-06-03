@@ -17,7 +17,7 @@ import { setGoalReached } from "@/store/caloriesSlice";
 import { GoalCelebration } from "@/components/frontend/animation/Goal-Celebration";
 
 const CaloriesScreen = () => {
-  const user = useQuery(api.test.getUser);
+  const user = useQuery(api.test.getuserDetails);
   const goal = 10;
 
   const {
