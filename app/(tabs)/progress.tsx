@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import dayjs from "dayjs";
 
 import { api } from "@/convex/_generated/api";
+import { CaloriesChart } from "@/components/frontend/progress/calorie-chart";
 
 export default function ProgressScreen() {
   const meals = useQuery(api.macros.getFood);
@@ -113,6 +114,7 @@ export default function ProgressScreen() {
         >
           <Text className="text-center text-black font-bold">View Details</Text>
         </TouchableOpacity>
+        <CaloriesChart />
       </View>
     </View>
   );
