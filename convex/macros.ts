@@ -13,22 +13,22 @@ export const addMeal = mutation({
 
     image: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, {name,calories,protein,carbs,sugar,fat,type,image}) => {
     const user = await ctx.auth.getUserIdentity();
     if (!user) throw new Error("unauthorized");
     const today = new Date().toISOString().split("T")[0];
 
     const mealId = await ctx.db.insert("foods", {
       userId: user.subject,
-      name: args.name,
-      calories: args.calories,
-      protein: args.protein,
-      carbs: args.carbs,
-      sugar: args.sugar,
-      fat: args.fat,
-      type: args.type,
+      name: name,
+      calories:  calories,
+      protein: protein,
+      carbs: carbs,
+      sugar: sugar,
+      fat: fat,
+      type: type,
       date: today,
-      image: args.image,
+      image: image,
       createdAt: Date.now(),
     });
 
