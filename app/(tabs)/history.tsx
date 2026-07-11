@@ -26,7 +26,7 @@ const History = () => {
     );
   }, [mealsData, search]);
 
-  // 📅 Group meals by date
+  // Group meals by date
   const groupedMeals = React.useMemo<GroupedMeals>(() => {
     if (filteredMeals.length === 0) return {};
 
@@ -40,14 +40,14 @@ const History = () => {
     }, {});
   }, [filteredMeals]);
 
-  // 🔽 Sort dates (latest first)
+  //  Sort dates (latest first)
   const sortedDates = React.useMemo<string[]>(() => {
     return Object.keys(groupedMeals).sort(
       (a, b) => new Date(b).getTime() - new Date(a).getTime(),
     );
   }, [groupedMeals]);
 
-  // ⏳ Loading
+ 
   if (!mealsData) {
     return (
       <SafeAreaView className="flex-1 bg-[#0f0f10] justify-center items-center">
@@ -91,8 +91,7 @@ const History = () => {
                 {groupedMeals[date].length} meals
               </Text>
             </View>
-
-            {/* Meals */}
+ 
             {groupedMeals[date].map((meal) => (
               <HistoryMealCard
                 key={meal._id}

@@ -77,16 +77,4 @@ export const getuserDetails = query({
     return details;
   },
 });
-
-// export const getUser = query({
-//   handler: async (ctx) => {
-//     const user = await ctx.auth.getUserIdentity();
-//     if (!user) return null;
-//     const data = await ctx.db
-//       .query("users")
-//       .withIndex("by_userId", (q) => q.eq("userId", user.subject))
-//       .unique();
-
-//     return data;
-//   },
-// });
+ 
