@@ -5,7 +5,7 @@ import { v } from "convex/values";
 export default defineSchema({
   // convex/schema.ts
   foods: defineTable({
-    userId: v.string(),
+    userId: v.string(),// this is could be act as primary key 
     name: v.string(),
     calories: v.number(),
     protein: v.number(),
