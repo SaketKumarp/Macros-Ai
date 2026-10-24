@@ -5,7 +5,7 @@ import { v } from "convex/values";
 export default defineSchema({
   // convex/schema.ts
   foods: defineTable({
-    userId: v.string(),// this is could be act as primary key 
+    userId: v.string(), // this is could be act as primary key
     name: v.string(),
     calories: v.number(),
     protein: v.number(),
@@ -19,6 +19,20 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_user_date", ["userId", "date"]),
+  // Add this inside defineSchema({ ... }) in convex/schema.ts
+
+  dailySummaries: defineTable({
+    userId: v.string(),
+    date: v.string(), // YYYY-MM-DD
+
+    totalCalories: v.number(),
+    totalProtein: v.number(),
+    totalCarbs: v.number(),
+    totalFat: v.number(),
+    totalSugar: v.number(),
+
+    updatedAt: v.number(),
+  }).index("by_user_date", ["userId", "date"]),
 
   goals: defineTable({
     userId: v.string(),
